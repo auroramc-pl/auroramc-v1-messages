@@ -65,10 +65,10 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
             hasNextChildren
                 ? childPath.substring(0, childPath.indexOf(PATH_CHILDREN_DELIMITER))
                 : childPath);
-    context.placeholder(placeholderScanner.getMergedPaths(parentPath, childPath), childValue);
+    context.placeholder(placeholderScanner.getMergedPath(parentPath, childPath), childValue);
     if (hasNextChildren) {
       final String nextParentPath =
-          placeholderScanner.getMergedPaths(
+          placeholderScanner.getMergedPath(
               parentPath, childPath.substring(0, childPath.indexOf(PATH_CHILDREN_DELIMITER)));
       final String nextChildPath =
           childPath.substring(childPath.indexOf(PATH_CHILDREN_DELIMITER) + 1);
