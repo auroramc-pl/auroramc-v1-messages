@@ -2,8 +2,8 @@ package pl.auroramc.messages.placeholder.transformer.registry;
 
 import java.util.HashMap;
 import java.util.Map;
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformer;
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformerPack;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 
 class ObjectTransformerRegistryImpl implements ObjectTransformerRegistry {
 

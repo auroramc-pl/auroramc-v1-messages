@@ -1,4 +1,4 @@
-package pl.auroramc.messages.placeholder.transformer;
+package pl.auroramc.messages.placeholder.transformer.pack;
 
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 

@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import pl.auroramc.messages.placeholder.context.PlaceholderContext;
 import pl.auroramc.messages.placeholder.reflect.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformer;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 
 class PlaceholderResolverImpl implements PlaceholderResolver {

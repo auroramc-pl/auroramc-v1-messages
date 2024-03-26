@@ -1,7 +1,7 @@
 package pl.auroramc.messages.placeholder.transformer.registry;
 
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformer;
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformerPack;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 
 public interface ObjectTransformerRegistry {
 

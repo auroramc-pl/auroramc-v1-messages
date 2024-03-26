@@ -7,7 +7,8 @@ import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransf
 
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
-import pl.auroramc.messages.placeholder.transformer.ObjectTransformerPack;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
+import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
 
 public interface MessageCompiler {
 
@@ -17,6 +18,10 @@ public interface MessageCompiler {
             getObjectTransformerRegistry(transformerPacks),
             getPlaceholderScanner(),
             getReflectivePlaceholderEvaluator()));
+  }
+
+  static MessageCompiler getMessageCompiler() {
+    return getMessageCompiler(new StandardObjectTransformerPack());
   }
 
   CompiledMessage compile(final MutableMessage message, final MessageDecoration... decorations);
