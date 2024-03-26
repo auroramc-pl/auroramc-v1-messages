@@ -9,17 +9,17 @@ public class MutableMessage {
 
   public static final String LINE_DELIMITER = "<newline>";
   private static final String EMPTY_DELIMITER = "";
-  private static final MutableMessage EMPTY_MESSAGE = new MutableMessage(EMPTY_DELIMITER);
+  private static final MutableMessage EMPTY_MESSAGE = of(EMPTY_DELIMITER);
   private final String template;
-  private final PlaceholderContext placeholderContext;
+  private final PlaceholderContext context;
 
-  MutableMessage(final String template) {
+  MutableMessage(final String template, final PlaceholderContext context) {
     this.template = template;
-    this.placeholderContext = newPlaceholderContext();
+    this.context = context;
   }
 
   public static MutableMessage of(final String template) {
-    return new MutableMessage(template);
+    return new MutableMessage(template, newPlaceholderContext());
   }
 
   public static MutableMessage empty() {
@@ -27,15 +27,14 @@ public class MutableMessage {
   }
 
   public MutableMessage placeholder(final String path, final Object value) {
-    placeholderContext.placeholder(path, value);
-    return this;
+    return new MutableMessage(template, context.placeholder(path, value));
   }
 
   public MutableMessage append(final MutableMessage message, final String delimiter) {
     if (isEmpty()) {
       return this;
     }
-    return new MutableMessage(template + delimiter + message.template);
+    return new MutableMessage(template + delimiter + message.template, context);
   }
 
   public MutableMessage append(final MutableMessage message) {
@@ -44,7 +43,7 @@ public class MutableMessage {
 
   public MutableMessage[] children(final String delimiter) {
     return stream(template.split(delimiter))
-        .map(MutableMessage::new)
+        .map(child -> new MutableMessage(child, context))
         .toArray(MutableMessage[]::new);
   }
 
@@ -64,7 +63,7 @@ public class MutableMessage {
     return template;
   }
 
-  public PlaceholderContext getPlaceholderContext() {
-    return placeholderContext;
+  public PlaceholderContext getContext() {
+    return context;
   }
 }

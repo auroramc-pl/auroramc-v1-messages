@@ -35,7 +35,7 @@ class MessageCompilerImpl implements MessageCompiler {
     return new CompiledMessage(
         miniMessage()
             .deserialize(
-                placeholderResolver.resolve(message.getTemplate(), message.getPlaceholderContext()))
+                placeholderResolver.resolve(message.getTemplate(), message.getContext()))
             .decorations(
                 stream(decorations)
                     .collect(toMap(MessageDecoration::decoration, MessageDecoration::state))));
