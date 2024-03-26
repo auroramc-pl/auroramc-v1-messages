@@ -34,9 +34,11 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
         continue;
       }
 
-      final String parentPath = path.substring(0, path.indexOf(PATH_CHILDREN_DELIMITER));
-      final String childPath = path.substring(path.indexOf(PATH_CHILDREN_DELIMITER) + 1);
-      traverse(context, parentPath, null, childPath);
+      if (placeholderScanner.hasPathChildren(path)) {
+        final String parentPath = path.substring(0, path.indexOf(PATH_CHILDREN_DELIMITER));
+        final String childPath = path.substring(path.indexOf(PATH_CHILDREN_DELIMITER) + 1);
+        traverse(context, parentPath, null, childPath);
+      }
     }
 
     return apply(template, context);
