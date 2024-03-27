@@ -20,22 +20,23 @@ class MessageCompilerImpl implements MessageCompiler {
   MessageCompilerImpl(final PlaceholderResolver placeholderResolver) {
     this.placeholderResolver = placeholderResolver;
     this.compiledMessagesByTemplates =
-        Caffeine.newBuilder().expireAfterAccess(ofSeconds(10)).build();
+        Caffeine.newBuilder().expireAfterAccess(ofSeconds(5)).build();
   }
 
   @Override
   public CompiledMessage compile(
       final MutableMessage message, final MessageDecoration... decorations) {
+    final String resolvedMessage =
+        placeholderResolver.resolve(message.getTemplate(), message.getContext());
     return compiledMessagesByTemplates.get(
-        message.getTemplate(), key -> compile0(message, decorations));
+        resolvedMessage, key -> compile0(resolvedMessage, decorations));
   }
 
   private CompiledMessage compile0(
-      final MutableMessage message, final MessageDecoration... decorations) {
+      final String resolvedMessage, final MessageDecoration... decorations) {
     return new CompiledMessage(
         miniMessage()
-            .deserialize(
-                placeholderResolver.resolve(message.getTemplate(), message.getContext()))
+            .deserialize(resolvedMessage)
             .decorations(
                 stream(decorations)
                     .collect(toMap(MessageDecoration::decoration, MessageDecoration::state))));
