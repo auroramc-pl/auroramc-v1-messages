@@ -37,7 +37,7 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
       if (placeholderScanner.hasPathChildren(path)) {
         final String parentPath = path.substring(0, path.indexOf(PATH_CHILDREN_DELIMITER));
         final String childPath = path.substring(path.indexOf(PATH_CHILDREN_DELIMITER) + 1);
-        context = traverse(context, parentPath, null, childPath);
+        context = traverse(context, path, parentPath, null, childPath);
       }
     }
 
@@ -46,38 +46,43 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
 
   private PlaceholderContext traverse(
       PlaceholderContext context,
+      final String initialPath,
       final String parentPath,
       final String parentPathPrev,
       final String childPath) {
-    if (parentPathPrev != null
-        && placeholderScanner.hasPathChildren(parentPath)
-        && context.getValueByPath(parentPath) == null) {
+    if (parentPathPrev != null && context.getValueByPath(parentPath) == null) {
       context =
           context.placeholder(
               parentPath,
-              placeholderEvaluator.evaluate(
-                  context.getValueByPath(parentPathPrev),
-                  parentPath.substring(parentPath.lastIndexOf(PATH_CHILDREN_DELIMITER) + 1)));
+              placeholderEvaluator.evaluate(context.getValueByPath(parentPathPrev), parentPath));
     }
 
-    final boolean hasNextChildren = placeholderScanner.hasPathChildren(childPath);
+    if (placeholderScanner.hasPathChildren(childPath)) {
+      final int nextParentPathStartIndex = childPath.indexOf(PATH_CHILDREN_DELIMITER);
+      final int nextParentPathEndIndex =
+          childPath.indexOf(PATH_CHILDREN_DELIMITER, nextParentPathStartIndex);
+
+      return traverse(
+          context,
+          initialPath,
+          childPath.substring(0, nextParentPathEndIndex),
+          parentPath,
+          childPath.substring(nextParentPathEndIndex + 1));
+    }
+
     final Object parentValue = context.getValueByPath(parentPath);
+
+    final int childPathStartIndex = childPath.indexOf(PATH_CHILDREN_DELIMITER);
+    final int childPathEndIndex =
+        childPath.indexOf(PATH_CHILDREN_DELIMITER, childPathStartIndex + 1);
     final Object childValue =
         placeholderEvaluator.evaluate(
-            parentValue, childPath.substring(childPath.indexOf(PATH_CHILDREN_DELIMITER) + 1));
+            parentValue,
+            placeholderScanner.hasPathChildren(childPath) && childPathEndIndex != -1
+                ? childPath.substring(0, childPathStartIndex)
+                : childPath);
 
-    context =
-        context.placeholder(placeholderScanner.getMergedPath(parentPath, childPath), childValue);
-    if (hasNextChildren) {
-      final String nextParentPath =
-          placeholderScanner.getMergedPath(
-              parentPath, childPath.substring(0, childPath.indexOf(PATH_CHILDREN_DELIMITER)));
-      final String nextChildPath =
-          childPath.substring(childPath.indexOf(PATH_CHILDREN_DELIMITER) + 1);
-      return traverse(context, nextParentPath, parentPath, nextChildPath);
-    }
-
-    return context;
+    return context.placeholder(initialPath, childValue);
   }
 
   private String apply(String template, final PlaceholderContext context) {
