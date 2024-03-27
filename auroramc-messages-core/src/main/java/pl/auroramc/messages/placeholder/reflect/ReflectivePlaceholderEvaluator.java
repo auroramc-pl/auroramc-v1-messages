@@ -19,14 +19,14 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
 
   @Override
   public Object evaluate(final Object object, final String path) {
-    return evaluate(object, resolveTokens(path), getReturnType(object, path));
+    return evaluate(object, path, getReturnType(object, path));
   }
 
   @Override
   public Object evaluate(final Object object, final String path, final Class<?> type) {
     final MethodType methodType = METHOD_TYPE_CACHE.computeIfAbsent(type, MethodType::methodType);
     try {
-      return LOOKUP.findVirtual(object.getClass(), path, methodType).invoke(object);
+      return LOOKUP.findVirtual(object.getClass(), resolveTokens(path), methodType).invoke(object);
     } catch (final Throwable exception) {
       throw new PlaceholderEvaluationException(
           "Could not evaluate placeholders, because of unexpected exception.", exception);
@@ -36,20 +36,23 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
   @Override
   public Class<?> getReturnType(final Object object, final String path) {
     return RETURN_TYPE_CACHE.computeIfAbsent(
-        new PlaceholderCompositeKey(object.getClass(), path), key -> getReturnType0(object, path));
+        new PlaceholderCompositeKey(object.getClass(), path),
+        key -> getReturnType0(object, resolveTokens(path)));
   }
 
   private Class<?> getReturnType0(final Object object, final String path) {
     final Class<?> clazz = object.getClass();
     try {
       final Method method = clazz.getMethod(path);
-      if (method.getReturnType() != void.class) {
-        return method.getReturnType();
+      if (method.getReturnType() == void.class) {
+        throw new PlaceholderEvaluationException(
+            "Could not evaluate placeholders, because the method returns void.");
       }
 
-      return clazz.getField(path).getType();
-    } catch (final NoSuchMethodException | NoSuchFieldException exception) {
-      return null;
+      return method.getReturnType();
+    } catch (final NoSuchMethodException exception) {
+      throw new PlaceholderEvaluationException(
+          "Could not evaluate placeholders, because of unexpected exception.", exception);
     }
   }
 
