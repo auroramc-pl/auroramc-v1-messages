@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 class PlaceholderScannerImpl implements PlaceholderScanner {
 
-  private static final String PLACEHOLDER_REGEX = "\\{(\\w+(?:\\.\\w+)*+)}";
+  private static final String PLACEHOLDER_REGEX = "\\{([\\w@]+(?:\\.[\\w@]+)*+)}";
   private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile(PLACEHOLDER_REGEX);
 
   PlaceholderScannerImpl() {}

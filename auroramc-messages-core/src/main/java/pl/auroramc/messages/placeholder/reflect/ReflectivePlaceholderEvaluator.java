@@ -1,5 +1,7 @@
 package pl.auroramc.messages.placeholder.reflect;
 
+import static pl.auroramc.messages.placeholder.reflect.ReflectivePlaceholderEvaluatorUtils.resolveTokens;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
@@ -17,7 +19,7 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
 
   @Override
   public Object evaluate(final Object object, final String path) {
-    return evaluate(object, path, getReturnType(object, path));
+    return evaluate(object, resolveTokens(path), getReturnType(object, path));
   }
 
   @Override
