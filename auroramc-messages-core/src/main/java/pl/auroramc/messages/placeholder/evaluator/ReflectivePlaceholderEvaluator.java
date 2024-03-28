@@ -1,6 +1,6 @@
-package pl.auroramc.messages.placeholder.reflect;
+package pl.auroramc.messages.placeholder.evaluator;
 
-import static pl.auroramc.messages.placeholder.reflect.ReflectivePlaceholderEvaluatorUtils.resolveTokens;
+import static pl.auroramc.messages.placeholder.evaluator.ReflectivePlaceholderEvaluatorUtils.resolveTokens;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;

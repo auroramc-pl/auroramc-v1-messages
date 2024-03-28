@@ -21,11 +21,6 @@ class PlaceholderScannerImpl implements PlaceholderScanner {
   }
 
   @Override
-  public String getMergedPath(final String parentPath, final String childPath) {
-    return parentPath + PATH_CHILDREN_DELIMITER + childPath;
-  }
-
-  @Override
   public boolean hasPathChildren(final String path) {
     return path.contains(PATH_CHILDREN_DELIMITER);
   }

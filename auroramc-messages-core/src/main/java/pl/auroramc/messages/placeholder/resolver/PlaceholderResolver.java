@@ -1,7 +1,7 @@
 package pl.auroramc.messages.placeholder.resolver;
 
 import pl.auroramc.messages.placeholder.context.PlaceholderContext;
-import pl.auroramc.messages.placeholder.reflect.PlaceholderEvaluator;
+import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 

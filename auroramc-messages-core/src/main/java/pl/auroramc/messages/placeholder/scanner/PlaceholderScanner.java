@@ -8,7 +8,5 @@ public interface PlaceholderScanner {
 
   String[] getPlaceholderPaths(final String template);
 
-  String getMergedPath(final String parentPath, final String childPath);
-
   boolean hasPathChildren(final String path);
 }

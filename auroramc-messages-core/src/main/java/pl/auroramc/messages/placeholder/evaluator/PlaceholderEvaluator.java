@@ -1,4 +1,4 @@
-package pl.auroramc.messages.placeholder.reflect;
+package pl.auroramc.messages.placeholder.evaluator;
 
 public interface PlaceholderEvaluator {
 

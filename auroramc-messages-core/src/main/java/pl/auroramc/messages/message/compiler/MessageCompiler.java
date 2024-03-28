@@ -1,6 +1,6 @@
 package pl.auroramc.messages.message.compiler;
 
-import static pl.auroramc.messages.placeholder.reflect.PlaceholderEvaluator.getReflectivePlaceholderEvaluator;
+import static pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator.getReflectivePlaceholderEvaluator;
 import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolver.getPlaceholderResolver;
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScanner.getPlaceholderScanner;
 import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry.getObjectTransformerRegistry;

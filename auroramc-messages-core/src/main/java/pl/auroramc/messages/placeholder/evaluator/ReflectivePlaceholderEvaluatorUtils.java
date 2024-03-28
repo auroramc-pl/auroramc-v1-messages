@@ -1,4 +1,4 @@
-package pl.auroramc.messages.placeholder.reflect;
+package pl.auroramc.messages.placeholder.evaluator;
 
 import static java.lang.Character.isLowerCase;
 import static java.lang.Character.toUpperCase;
