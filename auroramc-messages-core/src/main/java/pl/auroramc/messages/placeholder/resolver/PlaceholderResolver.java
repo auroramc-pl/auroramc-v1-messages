@@ -4,6 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.placeholder.context.PlaceholderContext;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 
 public interface PlaceholderResolver<T extends Audience> {
@@ -15,6 +16,8 @@ public interface PlaceholderResolver<T extends Audience> {
     return new PlaceholderResolverImpl<>(
         transformerRegistry, placeholderScanner, placeholderEvaluator);
   }
+
+  void register(final ObjectTransformerPack... transformerPacks);
 
   String resolve(final T viewer, final String template, final PlaceholderContext context);
 

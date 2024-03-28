@@ -1,6 +1,5 @@
 package pl.auroramc.messages.placeholder.resolver;
 
-import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getParentType;
 import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getPlaceholderKey;
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
@@ -10,11 +9,13 @@ import pl.auroramc.messages.placeholder.context.PlaceholderContext;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 
 class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver<T> {
 
-  private final ObjectTransformerRegistry objectTransformerRegistry;
+  private static final int TRANSFORMATION_MAXIMUM_TRIES = 5;
+  private final ObjectTransformerRegistry transformerRegistry;
   private final PlaceholderScanner placeholderScanner;
   private final PlaceholderEvaluator placeholderEvaluator;
 
@@ -22,9 +23,14 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
       final ObjectTransformerRegistry transformerRegistry,
       final PlaceholderScanner placeholderScanner,
       final PlaceholderEvaluator placeholderEvaluator) {
-    this.objectTransformerRegistry = transformerRegistry;
+    this.transformerRegistry = transformerRegistry;
     this.placeholderScanner = placeholderScanner;
     this.placeholderEvaluator = placeholderEvaluator;
+  }
+
+  @Override
+  public void register(final ObjectTransformerPack... transformerPacks) {
+    transformerRegistry.register(transformerPacks);
   }
 
   @Override
@@ -48,21 +54,35 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   @Override
   public String apply(final T viewer, String template, final PlaceholderContext context) {
     for (final Entry<String, Object> valueByPath : context.getValuesByPaths().entrySet()) {
-      final String placeholderKey = getPlaceholderKey(valueByPath.getKey());
-
-      final ObjectTransformer<Object, Object> objectTransformer =
-          objectTransformerRegistry.getTransformer(
-              getParentType(objectTransformerRegistry, valueByPath.getValue()));
-      if (objectTransformer == null) {
-        template = template.replace(placeholderKey, valueByPath.getValue().toString());
-        continue;
-      }
-
-      final Object transformedValue = objectTransformer.transform(valueByPath.getValue());
-      template = template.replace(placeholderKey, transformedValue.toString());
+      template =
+          template.replace(
+              getPlaceholderKey(valueByPath.getKey()), transform(valueByPath.getValue()));
     }
 
     return template;
+  }
+
+  private String transform(final Object value) {
+    return transform(value, 0);
+  }
+
+  private String transform(final Object value, int tries) {
+    if (tries > TRANSFORMATION_MAXIMUM_TRIES) {
+      return value.toString();
+    }
+
+    final ObjectTransformer<Object, Object> transformer =
+        transformerRegistry.getTransformer(value.getClass());
+    if (transformer == null) {
+      return value.toString();
+    }
+
+    final Object transformedValue = transformer.transform(value);
+    if (transformedValue instanceof String) {
+      return transformedValue.toString();
+    }
+
+    return transform(transformedValue, tries + 1);
   }
 
   private PlaceholderContext traverse(

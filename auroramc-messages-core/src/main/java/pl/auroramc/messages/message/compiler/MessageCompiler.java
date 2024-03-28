@@ -48,4 +48,6 @@ public interface MessageCompiler<T extends Audience> {
       final MutableMessage message,
       final String delimiter,
       final MessageDecoration... decorations);
+
+  void register(final ObjectTransformerPack... transformerPacks);
 }

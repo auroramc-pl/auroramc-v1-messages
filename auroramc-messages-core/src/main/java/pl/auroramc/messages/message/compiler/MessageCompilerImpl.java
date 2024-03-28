@@ -12,6 +12,7 @@ import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
+import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 
 class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
 
@@ -58,5 +59,10 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
     return stream(message.children(delimiter))
         .map(child -> compile(viewer, child, decorations))
         .toArray(CompiledMessage[]::new);
+  }
+
+  @Override
+  public void register(final ObjectTransformerPack... transformerPacks) {
+    placeholderResolver.register(transformerPacks);
   }
 }

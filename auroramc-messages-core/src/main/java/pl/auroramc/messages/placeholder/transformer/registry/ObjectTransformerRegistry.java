@@ -20,5 +20,5 @@ public interface ObjectTransformerRegistry {
 
   void register(final ObjectTransformer<?, ?> transformer);
 
-  void register(final ObjectTransformerPack transformerPack);
+  void register(final ObjectTransformerPack... transformerPacks);
 }

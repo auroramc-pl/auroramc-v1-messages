@@ -30,7 +30,9 @@ class ObjectTransformerRegistryImpl implements ObjectTransformerRegistry {
   }
 
   @Override
-  public void register(final ObjectTransformerPack transformerPack) {
-    transformerPack.register(this);
+  public void register(final ObjectTransformerPack... transformerPacks) {
+    for (final ObjectTransformerPack transformerPack : transformerPacks) {
+      transformerPack.register(this);
+    }
   }
 }
