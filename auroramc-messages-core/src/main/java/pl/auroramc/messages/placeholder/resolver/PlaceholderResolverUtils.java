@@ -6,8 +6,9 @@ import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRe
 
 final class PlaceholderResolverUtils {
 
-  public static final String PLACEHOLDER_KEY_TOKEN_INITIAL = "{";
-  public static final String PLACEHOLDER_KEY_TOKEN_ENCLOSE = "}";
+  private static final String KYORI_PACKAGE_NAME = "net.kyori.adventure.text";
+  private static final String PLACEHOLDER_KEY_TOKEN_INITIAL = "{";
+  private static final String PLACEHOLDER_KEY_TOKEN_ENCLOSE = "}";
 
   private PlaceholderResolverUtils() {}
 
@@ -21,19 +22,27 @@ final class PlaceholderResolverUtils {
       return null;
     }
 
-    Class<?> currentType = value.getClass();
-    if (isStandardType(currentType)) {
+    if (requiresDeepSearch(value)) {
+      Class<?> currentType = value.getClass();
+      if (isStandardType(currentType)) {
+        return currentType;
+      }
+
+      while (currentType.getInterfaces().length > 0) {
+        currentType = currentType.getInterfaces()[max(currentType.getInterfaces().length - 1, 0)];
+        if (objectTransformerRegistry.hasTransformer(currentType)) {
+          break;
+        }
+      }
+
       return currentType;
     }
 
-    while (currentType.getInterfaces().length > 0) {
-      currentType = currentType.getInterfaces()[max(currentType.getInterfaces().length - 1, 0)];
-      if (objectTransformerRegistry.hasTransformer(currentType)) {
-        break;
-      }
-    }
+    return value.getClass();
+  }
 
-    return currentType;
+  static boolean requiresDeepSearch(final Object value) {
+    return value.getClass().getName().startsWith(KYORI_PACKAGE_NAME);
   }
 
   private static boolean isStandardType(final Class<?> type) {
