@@ -5,13 +5,14 @@ import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
 import java.util.Map.Entry;
+import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.placeholder.context.PlaceholderContext;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
 
-class PlaceholderResolverImpl implements PlaceholderResolver {
+class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver<T> {
 
   private final ObjectTransformerRegistry objectTransformerRegistry;
   private final PlaceholderScanner placeholderScanner;
@@ -27,7 +28,7 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
   }
 
   @Override
-  public String resolve(final String template, PlaceholderContext context) {
+  public String resolve(final T viewer, final String template, PlaceholderContext context) {
     final String[] paths = placeholderScanner.getPlaceholderPaths(template);
     for (final String path : paths) {
       if (context.getValueByPath(path) != null) {
@@ -41,7 +42,27 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
       }
     }
 
-    return apply(template, context);
+    return apply(viewer, template, context);
+  }
+
+  @Override
+  public String apply(final T viewer, String template, final PlaceholderContext context) {
+    for (final Entry<String, Object> valueByPath : context.getValuesByPaths().entrySet()) {
+      final String placeholderKey = getPlaceholderKey(valueByPath.getKey());
+
+      final ObjectTransformer<Object, Object> objectTransformer =
+          objectTransformerRegistry.getTransformer(
+              getParentType(objectTransformerRegistry, valueByPath.getValue()));
+      if (objectTransformer == null) {
+        template = template.replace(placeholderKey, valueByPath.getValue().toString());
+        continue;
+      }
+
+      final Object transformedValue = objectTransformer.transform(valueByPath.getValue());
+      template = template.replace(placeholderKey, transformedValue.toString());
+    }
+
+    return template;
   }
 
   private PlaceholderContext traverse(
@@ -83,24 +104,5 @@ class PlaceholderResolverImpl implements PlaceholderResolver {
                 : childPath);
 
     return context.placeholder(initialPath, childValue);
-  }
-
-  private String apply(String template, final PlaceholderContext context) {
-    for (final Entry<String, Object> valueByPath : context.getValuesByPaths().entrySet()) {
-      final String placeholderKey = getPlaceholderKey(valueByPath.getKey());
-
-      final ObjectTransformer<Object, Object> objectTransformer =
-          objectTransformerRegistry.getTransformer(
-              getParentType(objectTransformerRegistry, valueByPath.getValue()));
-      if (objectTransformer == null) {
-        template = template.replace(placeholderKey, valueByPath.getValue().toString());
-        continue;
-      }
-
-      final Object transformedValue = objectTransformer.transform(valueByPath.getValue());
-      template = template.replace(placeholderKey, transformedValue.toString());
-    }
-
-    return template;
   }
 }

@@ -10,11 +10,6 @@ class StringToComponentTransformer implements ObjectTransformer<Component, Strin
   StringToComponentTransformer() {}
 
   @Override
-  public boolean supports(final Object value) {
-    return Component.class.isAssignableFrom(value.getClass());
-  }
-
-  @Override
   public String transform(final Component value) {
     return miniMessage().serialize(value);
   }

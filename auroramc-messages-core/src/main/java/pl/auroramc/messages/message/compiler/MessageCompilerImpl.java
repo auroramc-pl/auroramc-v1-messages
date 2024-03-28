@@ -8,16 +8,17 @@ import static pl.auroramc.messages.message.MutableMessage.LINE_DELIMITER;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 
-class MessageCompilerImpl implements MessageCompiler {
+class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
 
-  private final PlaceholderResolver placeholderResolver;
+  private final PlaceholderResolver<T> placeholderResolver;
   private final Cache<String, CompiledMessage> compiledMessagesByTemplates;
 
-  MessageCompilerImpl(final PlaceholderResolver placeholderResolver) {
+  MessageCompilerImpl(final PlaceholderResolver<T> placeholderResolver) {
     this.placeholderResolver = placeholderResolver;
     this.compiledMessagesByTemplates =
         Caffeine.newBuilder().expireAfterAccess(ofSeconds(5)).build();
@@ -25,9 +26,9 @@ class MessageCompilerImpl implements MessageCompiler {
 
   @Override
   public CompiledMessage compile(
-      final MutableMessage message, final MessageDecoration... decorations) {
+      final T viewer, final MutableMessage message, final MessageDecoration... decorations) {
     final String resolvedMessage =
-        placeholderResolver.resolve(message.getTemplate(), message.getContext());
+        placeholderResolver.resolve(viewer, message.getTemplate(), message.getContext());
     return compiledMessagesByTemplates.get(
         resolvedMessage, key -> compile0(resolvedMessage, decorations));
   }
@@ -44,17 +45,18 @@ class MessageCompilerImpl implements MessageCompiler {
 
   @Override
   public CompiledMessage[] compileChildren(
-      final MutableMessage message, final MessageDecoration... decorations) {
-    return compileChildren(message, LINE_DELIMITER, decorations);
+      final T viewer, final MutableMessage message, final MessageDecoration... decorations) {
+    return compileChildren(viewer, message, LINE_DELIMITER, decorations);
   }
 
   @Override
   public CompiledMessage[] compileChildren(
+      final T viewer,
       final MutableMessage message,
       final String delimiter,
       final MessageDecoration... decorations) {
     return stream(message.children(delimiter))
-        .map(child -> compile(child, decorations))
+        .map(child -> compile(viewer, child, decorations))
         .toArray(CompiledMessage[]::new);
   }
 }
