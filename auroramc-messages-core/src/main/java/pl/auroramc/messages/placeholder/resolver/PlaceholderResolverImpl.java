@@ -1,5 +1,6 @@
 package pl.auroramc.messages.placeholder.resolver;
 
+import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getParentType;
 import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getPlaceholderKey;
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
@@ -72,7 +73,7 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
     }
 
     final ObjectTransformer<Object, Object> transformer =
-        transformerRegistry.getTransformer(value.getClass());
+        transformerRegistry.getTransformer(getParentType(transformerRegistry, value));
     if (transformer == null) {
       return value.toString();
     }
