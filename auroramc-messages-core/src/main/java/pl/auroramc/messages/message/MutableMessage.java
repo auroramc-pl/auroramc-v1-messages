@@ -36,7 +36,7 @@ public class MutableMessage {
 
   public MutableMessage append(final MutableMessage message, final String delimiter) {
     if (isEmpty()) {
-      return this;
+      return message;
     }
 
     return new MutableMessage(template + delimiter + message.template, context);
