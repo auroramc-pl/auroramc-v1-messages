@@ -18,6 +18,10 @@ public class MutableMessage {
     this.context = context;
   }
 
+  public static MutableMessageCollector collector() {
+    return new MutableMessageCollector();
+  }
+
   public static MutableMessage of(final String template) {
     return new MutableMessage(template, newPlaceholderContext());
   }
@@ -34,6 +38,7 @@ public class MutableMessage {
     if (isEmpty()) {
       return this;
     }
+
     return new MutableMessage(template + delimiter + message.template, context);
   }
 
@@ -49,10 +54,6 @@ public class MutableMessage {
 
   public MutableMessage[] children() {
     return children(LINE_DELIMITER);
-  }
-
-  public MutableMessageCollector collector() {
-    return new MutableMessageCollector();
   }
 
   public boolean isEmpty() {
