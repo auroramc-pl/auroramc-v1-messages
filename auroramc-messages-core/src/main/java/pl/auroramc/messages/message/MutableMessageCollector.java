@@ -18,6 +18,10 @@ public class MutableMessageCollector
 
   MutableMessageCollector() {}
 
+  public static MutableMessageCollector collector() {
+    return new MutableMessageCollector();
+  }
+
   @Override
   public Supplier<List<MutableMessage>> supplier() {
     return ArrayList::new;

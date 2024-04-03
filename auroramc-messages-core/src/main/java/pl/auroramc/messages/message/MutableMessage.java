@@ -18,10 +18,6 @@ public class MutableMessage {
     this.context = context;
   }
 
-  public static MutableMessageCollector collector() {
-    return new MutableMessageCollector();
-  }
-
   public static MutableMessage of(final String template) {
     return new MutableMessage(template, newPlaceholderContext());
   }
