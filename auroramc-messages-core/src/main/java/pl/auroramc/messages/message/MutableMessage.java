@@ -1,9 +1,9 @@
 package pl.auroramc.messages.message;
 
 import static java.util.Arrays.stream;
-import static pl.auroramc.messages.placeholder.context.PlaceholderContext.newPlaceholderContext;
+import static pl.auroramc.messages.message.property.MessageProperty.getMessageProperty;
 
-import pl.auroramc.messages.placeholder.context.PlaceholderContext;
+import pl.auroramc.messages.message.property.MessageProperty;
 
 public class MutableMessage {
 
@@ -11,15 +11,15 @@ public class MutableMessage {
   private static final String EMPTY_DELIMITER = "";
   private static final MutableMessage EMPTY_MESSAGE = of(EMPTY_DELIMITER);
   private final String template;
-  private final PlaceholderContext context;
+  private final MessageProperty property;
 
-  MutableMessage(final String template, final PlaceholderContext context) {
+  MutableMessage(final String template, final MessageProperty property) {
     this.template = template;
-    this.context = context;
+    this.property = property;
   }
 
   public static MutableMessage of(final String template) {
-    return new MutableMessage(template, newPlaceholderContext());
+    return new MutableMessage(template, getMessageProperty());
   }
 
   public static MutableMessage empty() {
@@ -27,7 +27,11 @@ public class MutableMessage {
   }
 
   public MutableMessage placeholder(final String path, final Object value) {
-    return new MutableMessage(template, context.placeholder(path, value));
+    return new MutableMessage(template, property.placeholder(path, value));
+  }
+
+  public MutableMessage mapping(final String path, final String target) {
+    return new MutableMessage(template, property.mapping(path, target));
   }
 
   public MutableMessage append(final MutableMessage message, final String delimiter) {
@@ -35,7 +39,7 @@ public class MutableMessage {
       return message;
     }
 
-    return new MutableMessage(template + delimiter + message.template, context);
+    return new MutableMessage(template + delimiter + message.template, property);
   }
 
   public MutableMessage append(final MutableMessage message) {
@@ -44,7 +48,7 @@ public class MutableMessage {
 
   public MutableMessage[] children(final String delimiter) {
     return stream(template.split(delimiter))
-        .map(child -> new MutableMessage(child, context))
+        .map(child -> new MutableMessage(child, property))
         .toArray(MutableMessage[]::new);
   }
 
@@ -60,7 +64,7 @@ public class MutableMessage {
     return template;
   }
 
-  public PlaceholderContext getContext() {
-    return context;
+  public MessageProperty getProperty() {
+    return property;
   }
 }

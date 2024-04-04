@@ -29,7 +29,7 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
   public CompiledMessage compile(
       final T viewer, final MutableMessage message, final MessageDecoration... decorations) {
     final String resolvedMessage =
-        placeholderResolver.resolve(viewer, message.getTemplate(), message.getContext());
+        placeholderResolver.resolve(viewer, message.getTemplate(), message.getProperty());
     return compiledMessagesByTemplates.get(
         resolvedMessage, key -> compile0(resolvedMessage, decorations));
   }

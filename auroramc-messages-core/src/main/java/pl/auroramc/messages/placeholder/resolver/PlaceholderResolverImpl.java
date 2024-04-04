@@ -6,7 +6,7 @@ import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.P
 
 import java.util.Map.Entry;
 import net.kyori.adventure.audience.Audience;
-import pl.auroramc.messages.placeholder.context.PlaceholderContext;
+import pl.auroramc.messages.message.property.MessageProperty;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
@@ -35,26 +35,26 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   @Override
-  public String resolve(final T viewer, final String template, PlaceholderContext context) {
+  public String resolve(final T viewer, final String template, MessageProperty property) {
     final String[] paths = placeholderScanner.getPlaceholderPaths(template);
     for (final String path : paths) {
-      if (context.getValueByPath(path) != null) {
+      if (property.getValueByPath(path) != null) {
         continue;
       }
 
       if (placeholderScanner.hasPathChildren(path)) {
         final String parentPath = path.substring(0, path.indexOf(PATH_CHILDREN_DELIMITER));
         final String childPath = path.substring(path.indexOf(PATH_CHILDREN_DELIMITER) + 1);
-        context = traverse(context, path, parentPath, null, childPath);
+        property = traverse(property, path, parentPath, null, childPath);
       }
     }
 
-    return apply(viewer, template, context);
+    return apply(viewer, template, property);
   }
 
   @Override
-  public String apply(final T viewer, String template, final PlaceholderContext context) {
-    for (final Entry<String, Object> valueByPath : context.getValuesByPaths().entrySet()) {
+  public String apply(final T viewer, String template, final MessageProperty property) {
+    for (final Entry<String, Object> valueByPath : property.getValuesByPaths().entrySet()) {
       template =
           template.replace(
               getPlaceholderKey(valueByPath.getKey()), transform(valueByPath.getValue()));
@@ -86,17 +86,17 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
     return transform(transformedValue, tries + 1);
   }
 
-  private PlaceholderContext traverse(
-      PlaceholderContext context,
+  private MessageProperty traverse(
+      MessageProperty property,
       final String initialPath,
       final String parentPath,
       final String parentPathPrev,
       final String childPath) {
-    if (parentPathPrev != null && context.getValueByPath(parentPath) == null) {
-      context =
-          context.placeholder(
+    if (parentPathPrev != null && property.getValueByPath(parentPath) == null) {
+      property =
+          property.placeholder(
               parentPath,
-              placeholderEvaluator.evaluate(context.getValueByPath(parentPathPrev), parentPath));
+              placeholderEvaluator.evaluate(property.getValueByPath(parentPathPrev), parentPath));
     }
 
     if (placeholderScanner.hasPathChildren(childPath)) {
@@ -105,14 +105,14 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
           childPath.indexOf(PATH_CHILDREN_DELIMITER, nextParentPathStartIndex);
 
       return traverse(
-          context,
+          property,
           initialPath,
           childPath.substring(0, nextParentPathEndIndex),
           parentPath,
           childPath.substring(nextParentPathEndIndex + 1));
     }
 
-    final Object parentValue = context.getValueByPath(parentPath);
+    final Object parentValue = property.getValueByPath(parentPath);
 
     final int childPathStartIndex = childPath.indexOf(PATH_CHILDREN_DELIMITER);
     final int childPathEndIndex =
@@ -120,10 +120,11 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
     final Object childValue =
         placeholderEvaluator.evaluate(
             parentValue,
-            placeholderScanner.hasPathChildren(childPath) && childPathEndIndex != -1
-                ? childPath.substring(0, childPathStartIndex)
-                : childPath);
+            property.getTargetByPath(
+                placeholderScanner.hasPathChildren(childPath) && childPathEndIndex != -1
+                    ? childPath.substring(0, childPathStartIndex)
+                    : childPath));
 
-    return context.placeholder(initialPath, childValue);
+    return property.placeholder(initialPath, childValue);
   }
 }
