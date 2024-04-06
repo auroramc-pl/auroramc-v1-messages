@@ -40,6 +40,17 @@ public interface MessageCompiler<T extends Audience> {
   CompiledMessage compile(
       final T viewer, final MutableMessage message, final MessageDecoration... decorations);
 
+  default CompiledMessage[] compileChildren(
+      final MutableMessage message, final MessageDecoration... decorations) {
+    return compileChildren(null, message, decorations);
+  }
+
+  default CompiledMessage[] compileChildren(
+      final MutableMessage message, final String delimiter, final MessageDecoration... decorations
+  ) {
+    return compileChildren(null, message, delimiter, decorations);
+  }
+
   CompiledMessage[] compileChildren(
       final T viewer, final MutableMessage message, final MessageDecoration... decorations);
 
