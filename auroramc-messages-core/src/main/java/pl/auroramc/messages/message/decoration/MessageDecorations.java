@@ -6,7 +6,7 @@ import static pl.auroramc.messages.message.decoration.MessageDecoration.decorate
 
 public final class MessageDecorations {
 
-  private static final MessageDecoration NO_CURSIVE = decorate(ITALIC, FALSE);
+  public static final MessageDecoration NO_CURSIVE = decorate(ITALIC, FALSE);
 
   private MessageDecorations() {}
 }
