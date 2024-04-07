@@ -37,7 +37,7 @@ abstract class MessageService<M, V> implements MessageFacade<M, V> {
     for (final Entry<String, Object> entry : valuesByKeys.entrySet()) {
       messagesByKeys.put(entry.getKey(), getMessageToPersist((String) entry.getValue()));
     }
-    messagesByLocales.put(locale, messagesByKeys);
+    messagesByLocales.computeIfAbsent(locale, key -> new LinkedHashMap<>()).putAll(messagesByKeys);
   }
 
   @Override
