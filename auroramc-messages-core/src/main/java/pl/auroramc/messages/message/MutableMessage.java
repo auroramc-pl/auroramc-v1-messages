@@ -3,6 +3,7 @@ package pl.auroramc.messages.message;
 import static java.util.Arrays.stream;
 import static pl.auroramc.messages.message.property.MessageProperty.getMessageProperty;
 
+import java.util.Map;
 import pl.auroramc.messages.message.property.MessageProperty;
 
 public class MutableMessage {
@@ -28,6 +29,10 @@ public class MutableMessage {
 
   public MutableMessage placeholder(final String path, final Object value) {
     return new MutableMessage(template, property.placeholder(path, value));
+  }
+
+  public MutableMessage placeholders(final Map<String, Object> placeholders) {
+    return new MutableMessage(template, property.placeholders(placeholders));
   }
 
   public MutableMessage mapping(final String path, final String target) {

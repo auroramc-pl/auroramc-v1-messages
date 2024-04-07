@@ -24,6 +24,12 @@ public class MessageProperty {
     return new MessageProperty(copyOfValuesByPaths, targetByPath);
   }
 
+  public MessageProperty placeholders(final Map<String, Object> placeholders) {
+    final Map<String, Object> copyOfValuesByPaths = new HashMap<>(this.valuesByPaths);
+    copyOfValuesByPaths.putAll(placeholders);
+    return new MessageProperty(copyOfValuesByPaths, targetByPath);
+  }
+
   public MessageProperty mapping(final String path, final String target) {
     targetByPath.put(path, target);
     return this;
