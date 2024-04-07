@@ -5,6 +5,7 @@ import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolver.getP
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScanner.getPlaceholderScanner;
 import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry.getObjectTransformerRegistry;
 
+import java.util.concurrent.Executor;
 import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
@@ -16,21 +17,22 @@ import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObject
 public interface MessageCompiler<T extends Audience> {
 
   static <T extends Audience> MessageCompiler<T> getMessageCompiler(
-      final ObjectTransformerPack... transformerPacks) {
+      final Executor executor, final ObjectTransformerPack... transformerPacks) {
     return getMessageCompiler(
+        executor,
         getPlaceholderResolver(
             getObjectTransformerRegistry(transformerPacks),
             getPlaceholderScanner(),
             getReflectivePlaceholderEvaluator()));
   }
 
-  static <T extends Audience> MessageCompiler<T> getMessageCompiler() {
-    return getMessageCompiler(new StandardObjectTransformerPack());
+  static <T extends Audience> MessageCompiler<T> getMessageCompiler(final Executor executor) {
+    return getMessageCompiler(executor, new StandardObjectTransformerPack());
   }
 
   static <T extends Audience> MessageCompiler<T> getMessageCompiler(
-      final PlaceholderResolver<T> placeholderResolver) {
-    return new MessageCompilerImpl<>(placeholderResolver);
+      final Executor executor, final PlaceholderResolver<T> placeholderResolver) {
+    return new MessageCompilerImpl<>(executor, placeholderResolver);
   }
 
   default CompiledMessage compile(
