@@ -3,14 +3,17 @@ package pl.auroramc.messages.message.compiler;
 import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toUnmodifiableMap;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static pl.auroramc.messages.message.MutableMessage.LINE_DELIMITER;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.util.Map.Entry;
 import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
+import pl.auroramc.messages.message.group.MutableMessageGroup;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 
@@ -59,6 +62,16 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
     return stream(message.children(delimiter))
         .map(child -> compile(viewer, child, decorations))
         .toArray(CompiledMessage[]::new);
+  }
+
+  @Override
+  public CompiledMessageGroup compileGroup(
+      final MutableMessageGroup messageGroup, final MessageDecoration... decorations) {
+    return new CompiledMessageGroup(
+        messageGroup.messagesByReceivers().entrySet().stream()
+            .collect(
+                toUnmodifiableMap(
+                    entry -> compile(null, entry.getKey(), decorations), Entry::getValue)));
   }
 
   @Override

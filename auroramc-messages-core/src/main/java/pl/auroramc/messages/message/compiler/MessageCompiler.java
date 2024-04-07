@@ -8,6 +8,7 @@ import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransf
 import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
+import pl.auroramc.messages.message.group.MutableMessageGroup;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
@@ -46,8 +47,9 @@ public interface MessageCompiler<T extends Audience> {
   }
 
   default CompiledMessage[] compileChildren(
-      final MutableMessage message, final String delimiter, final MessageDecoration... decorations
-  ) {
+      final MutableMessage message,
+      final String delimiter,
+      final MessageDecoration... decorations) {
     return compileChildren(null, message, delimiter, decorations);
   }
 
@@ -59,6 +61,9 @@ public interface MessageCompiler<T extends Audience> {
       final MutableMessage message,
       final String delimiter,
       final MessageDecoration... decorations);
+
+  CompiledMessageGroup compileGroup(
+      final MutableMessageGroup messageGroup, final MessageDecoration... decorations);
 
   void register(final ObjectTransformerPack... transformerPacks);
 }
