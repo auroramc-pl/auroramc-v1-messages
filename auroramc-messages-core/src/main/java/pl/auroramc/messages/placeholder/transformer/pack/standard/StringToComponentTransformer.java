@@ -15,7 +15,7 @@ class StringToComponentTransformer implements ObjectTransformer<Component, Strin
   }
 
   @Override
-  public Class<?> getType() {
+  public Class<?> type() {
     return Component.class;
   }
 }

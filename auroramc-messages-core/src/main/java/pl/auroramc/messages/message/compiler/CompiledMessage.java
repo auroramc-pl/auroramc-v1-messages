@@ -20,17 +20,17 @@ public class CompiledMessage {
     return new CompiledMessage(appendComponent(component, message.getComponent()));
   }
 
-  public void render(final Audience audience, final MessageDisplay... displays) {
+  public void deliver(final Audience audience, final MessageDisplay... displays) {
     if (displays.length == 0) {
-      throw new CompiledMessageRenderingException("At least one display must be provided");
+      throw new CompiledMessageDeliveringException("At least one display must be provided");
     }
 
     for (final MessageDisplay display : displays) {
-      render(audience, display);
+      deliver(audience, display);
     }
   }
 
-  private void render(final Audience audience, final MessageDisplay display) {
+  private void deliver(final Audience audience, final MessageDisplay display) {
     if (display == CHAT) {
       audience.sendMessage(component);
     } else if (display == ACTION_BAR) {

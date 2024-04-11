@@ -1,8 +1,8 @@
 package pl.auroramc.messages.message.compiler;
 
-class CompiledMessageRenderingException extends IllegalArgumentException {
+class CompiledMessageDeliveringException extends IllegalArgumentException {
 
-  CompiledMessageRenderingException(final String message) {
+  CompiledMessageDeliveringException(final String message) {
     super(message);
   }
 }

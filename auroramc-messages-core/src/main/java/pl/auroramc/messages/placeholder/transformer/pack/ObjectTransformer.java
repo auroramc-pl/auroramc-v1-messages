@@ -4,5 +4,5 @@ public interface ObjectTransformer<T, R> {
 
   R transform(final T value);
 
-  Class<?> getType();
+  Class<?> type();
 }

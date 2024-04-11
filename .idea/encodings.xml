@@ -7,6 +7,10 @@
     <file url="file://$PROJECT_DIR$/auroramc-messages-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auroramc-messages-example/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auroramc-messages-example/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/auroramc-messages-platform-bukkit/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/auroramc-messages-platform-bukkit/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
