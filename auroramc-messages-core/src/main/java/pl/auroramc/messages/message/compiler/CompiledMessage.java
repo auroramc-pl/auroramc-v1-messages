@@ -1,5 +1,6 @@
 package pl.auroramc.messages.message.compiler;
 
+import static pl.auroramc.messages.message.compiler.CompiledMessageCollectorUtils.appendComponent;
 import static pl.auroramc.messages.message.display.MessageDisplay.ACTION_BAR;
 import static pl.auroramc.messages.message.display.MessageDisplay.CHAT;
 
@@ -13,6 +14,10 @@ public class CompiledMessage {
 
   CompiledMessage(final Component component) {
     this.component = component;
+  }
+
+  public CompiledMessage append(final CompiledMessage message) {
+    return new CompiledMessage(appendComponent(component, message.getComponent()));
   }
 
   public void render(final Audience audience, final MessageDisplay... displays) {
