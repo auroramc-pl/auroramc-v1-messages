@@ -4,12 +4,12 @@ import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableMap;
+import static net.kyori.adventure.audience.Audience.audience;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static pl.auroramc.messages.message.MutableMessage.LINE_DELIMITER;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import java.util.Map.Entry;
 import java.util.concurrent.Executor;
 import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
@@ -72,7 +72,8 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
         messageGroup.messagesByReceivers().entrySet().stream()
             .collect(
                 toUnmodifiableMap(
-                    entry -> compile(null, entry.getKey(), decorations), Entry::getValue)));
+                    entry -> compile(null, entry.getKey(), decorations),
+                    entry -> audience(entry.getValue()))));
   }
 
   @Override
