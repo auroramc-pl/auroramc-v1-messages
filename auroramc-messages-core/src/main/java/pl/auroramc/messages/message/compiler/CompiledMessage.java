@@ -20,6 +20,10 @@ public class CompiledMessage {
     return new CompiledMessage(appendComponent(component, message.getComponent()));
   }
 
+  public void deliver(final Audience audience) {
+    deliver(audience, CHAT);
+  }
+
   public void deliver(final Audience audience, final MessageDisplay... displays) {
     if (displays.length == 0) {
       throw new CompiledMessageDeliveringException("At least one display must be provided");
