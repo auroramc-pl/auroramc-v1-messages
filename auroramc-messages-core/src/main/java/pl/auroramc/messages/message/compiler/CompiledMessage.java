@@ -10,10 +10,15 @@ import pl.auroramc.messages.message.display.MessageDisplay;
 
 public class CompiledMessage {
 
+  private static final CompiledMessage EMPTY_MESSAGE = new CompiledMessage(Component.empty());
   private final Component component;
 
   CompiledMessage(final Component component) {
     this.component = component;
+  }
+
+  public static CompiledMessage empty() {
+    return EMPTY_MESSAGE;
   }
 
   public CompiledMessage append(final CompiledMessage message) {
