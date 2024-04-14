@@ -37,6 +37,12 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
 
   @Override
   public Class<?> getReturnType(final Object object, final String path) {
+    if (object == null) {
+      throw new PlaceholderEvaluationException(
+          "Could not evaluate placeholders, because the object is null in %s path."
+              .formatted(path));
+    }
+
     return RETURN_TYPE_CACHE.computeIfAbsent(
         new PlaceholderCompositeKey(object.getClass(), path),
         key -> getReturnType0(object, resolveTokens(path)));
