@@ -11,6 +11,7 @@ import pl.auroramc.messages.message.display.MessageDisplay;
 public class CompiledMessage {
 
   private static final CompiledMessage EMPTY_MESSAGE = new CompiledMessage(Component.empty());
+  private static final CompiledMessage NEWLINE_MESSAGE = new CompiledMessage(Component.newline());
   private final Component component;
 
   CompiledMessage(final Component component) {
@@ -19,6 +20,10 @@ public class CompiledMessage {
 
   public static CompiledMessage empty() {
     return EMPTY_MESSAGE;
+  }
+
+  public static CompiledMessage newline() {
+    return NEWLINE_MESSAGE;
   }
 
   public CompiledMessage append(final CompiledMessage message) {
