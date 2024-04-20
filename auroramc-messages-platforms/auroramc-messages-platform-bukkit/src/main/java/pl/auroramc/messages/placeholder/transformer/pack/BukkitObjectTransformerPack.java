@@ -14,5 +14,6 @@ public class BukkitObjectTransformerPack implements ObjectTransformerPack {
   @Override
   public void register(final ObjectTransformerRegistry transformerRegistry) {
     transformerRegistry.register(new ComponentToItemStackTransformer(messageCompiler));
+    transformerRegistry.register(new StringToMaterialTransformer());
   }
 }
