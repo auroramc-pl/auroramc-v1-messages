@@ -13,6 +13,6 @@ final class CompiledMessageCollectorUtils {
   }
 
   static Component appendComponent(final Component original, final Component appendix) {
-    return isEmptyComponent(original) ? original : appendix.appendNewline().append(original);
+    return isEmptyComponent(original) ? appendix : original.appendNewline().append(appendix);
   }
 }
