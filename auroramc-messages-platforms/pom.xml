@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>auroramc-messages-platform-bukkit</module>
+    <module>auroramc-messages-platform-velocity</module>
   </modules>
 
   <properties>
