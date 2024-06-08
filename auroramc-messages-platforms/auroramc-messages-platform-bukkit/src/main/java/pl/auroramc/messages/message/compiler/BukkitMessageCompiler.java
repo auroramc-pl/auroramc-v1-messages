@@ -7,13 +7,13 @@ import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransf
 
 import java.util.concurrent.Executor;
 import org.bukkit.command.CommandSender;
-import pl.auroramc.commons.integration.messages.placeholder.transformer.pack.CommonsObjectTransformerPack;
 import pl.auroramc.commons.scheduler.Scheduler;
 import pl.auroramc.commons.scheduler.caffeine.CaffeineExecutor;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 import pl.auroramc.messages.placeholder.transformer.pack.BukkitObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
+import pl.auroramc.messages.serdes.commons.CommonsObjectTransformerPack;
 
 public interface BukkitMessageCompiler extends MessageCompiler<CommandSender> {
 

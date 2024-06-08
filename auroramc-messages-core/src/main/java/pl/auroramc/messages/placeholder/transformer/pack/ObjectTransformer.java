@@ -1,8 +1,16 @@
 package pl.auroramc.messages.placeholder.transformer.pack;
 
-public interface ObjectTransformer<T, R> {
+public abstract class ObjectTransformer<T, R> {
 
-  R transform(final T value);
+  private final Class<?> transformatableType;
 
-  Class<?> type();
+  protected ObjectTransformer(final Class<?> transformatableType) {
+    this.transformatableType = transformatableType;
+  }
+
+  public abstract R transform(final T value);
+
+  public Class<?> getTransformatableType() {
+    return transformatableType;
+  }
 }

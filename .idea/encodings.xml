@@ -13,6 +13,12 @@
     <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/auroramc-messages-platform-velocity/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auroramc-messages-platforms/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/auroramc-messages-integration-auroramc-commons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/auroramc-messages-integration-auroramc-commons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/auroramc-messages-serdes-commons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/auroramc-messages-serdes-commons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/auroramc-messages-serdes/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

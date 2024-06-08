@@ -12,6 +12,7 @@
     <module>auroramc-messages-annotation-processor</module>
     <module>auroramc-messages-core</module>
     <module>auroramc-messages-platforms</module>
+    <module>auroramc-messages-serdes</module>
   </modules>
 
   <properties>

@@ -5,24 +5,21 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 
 import org.bukkit.Material;
 
-class StringToMaterialTransformer implements ObjectTransformer<Material, String> {
+class StringToMaterialTransformer extends ObjectTransformer<Material, String> {
 
   private static final String ENUM_SECTION_DELIMITER = "_";
   private static final String NAME_SECTION_DELIMITER = " ";
 
-  StringToMaterialTransformer() {}
+  StringToMaterialTransformer() {
+    super(Material.class);
+  }
 
   @Override
   public String transform(final Material value) {
-    return getPrettyName(value);
+    return getFormattedName(value);
   }
 
-  @Override
-  public Class<?> type() {
-    return Material.class;
-  }
-
-  private String getPrettyName(final Material material) {
+  private String getFormattedName(final Material material) {
     return capitalize(
         material.name().toLowerCase(ROOT).replace(ENUM_SECTION_DELIMITER, NAME_SECTION_DELIMITER));
   }
