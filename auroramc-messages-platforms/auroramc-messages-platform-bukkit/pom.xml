@@ -52,7 +52,7 @@
     <dependency>
       <groupId>eu.okaeri</groupId>
       <artifactId>okaeri-configs-core</artifactId>
-      <version>5.0.1</version>
+      <version>5.0.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
