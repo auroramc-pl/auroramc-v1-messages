@@ -1,5 +1,6 @@
 package pl.auroramc.messages.i18n;
 
+import static java.util.Collections.emptySet;
 import static pl.auroramc.commons.resource.ResourceUtils.unpackResources;
 import static pl.auroramc.messages.i18n.MessageSourceUtils.getLocaleByFile;
 import static pl.auroramc.messages.i18n.MessageSourceUtils.getMessageSource;
@@ -32,7 +33,7 @@ class BukkitMessageFacadeImpl extends MutableMessageService<CommandSender>
       final String path,
       final String prefix,
       final String suffix) {
-    unpackResources(jarFile, dataPath, path, prefix, suffix)
+    unpackResources(jarFile, dataPath, path, prefix, suffix, emptySet())
         .forEach(resourceFile -> registerResource(messageSourceType, prefix, suffix, resourceFile));
     return this;
   }
