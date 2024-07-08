@@ -46,7 +46,7 @@ abstract class MessageService<M, V> implements MessageFacade<M, V> {
       return messagesByLocales.get(locale).get(key);
     }
 
-    final Locale strippedLocale = new Locale(locale.getLanguage());
+    final Locale strippedLocale = Locale.of(locale.getLanguage());
     if (messagesByLocales.containsKey(strippedLocale)) {
       return messagesByLocales.get(strippedLocale).get(key);
     }
