@@ -117,13 +117,14 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
     final int childPathStartIndex = childPath.indexOf(PATH_CHILDREN_DELIMITER);
     final int childPathEndIndex =
         childPath.indexOf(PATH_CHILDREN_DELIMITER, childPathStartIndex + 1);
-    final Object childValue =
+    Object childValue =
         placeholderEvaluator.evaluate(
             parentValue,
             property.getTargetByPath(
                 placeholderScanner.hasPathChildren(childPath) && childPathEndIndex != -1
                     ? childPath.substring(0, childPathStartIndex)
                     : childPath));
+    childValue = transform(childValue);
 
     return property.placeholder(initialPath, childValue);
   }
