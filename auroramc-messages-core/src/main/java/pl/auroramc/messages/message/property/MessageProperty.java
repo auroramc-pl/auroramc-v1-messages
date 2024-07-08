@@ -19,7 +19,9 @@ public class MessageProperty {
   }
 
   public MessageProperty placeholder(final String path, final Object value) {
-    return placeholders(Map.of(path, value));
+    final Map<String, Object> copyOfValuesByPaths = new HashMap<>(this.valuesByPaths);
+    copyOfValuesByPaths.put(path, value);
+    return new MessageProperty(copyOfValuesByPaths, this.targetByPath);
   }
 
   public MessageProperty placeholders(final Map<String, Object> placeholders) {

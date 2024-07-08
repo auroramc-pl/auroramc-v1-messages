@@ -16,6 +16,7 @@ import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRe
 class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver<T> {
 
   private static final int TRANSFORMATION_MAXIMUM_TRIES = 5;
+  private static final String BLANK_VALUE = "";
   private final ObjectTransformerRegistry transformerRegistry;
   private final PlaceholderScanner placeholderScanner;
   private final PlaceholderEvaluator placeholderEvaluator;
@@ -68,6 +69,10 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   private String transform(final Object value, int tries) {
+    if (value == null) {
+      return BLANK_VALUE;
+    }
+    
     if (tries > TRANSFORMATION_MAXIMUM_TRIES) {
       return value.toString();
     }
