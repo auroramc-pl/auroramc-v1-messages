@@ -8,6 +8,7 @@ public class StandardObjectTransformerPack implements ObjectTransformerPack {
   @Override
   public void register(final ObjectTransformerRegistry transformerRegistry) {
     transformerRegistry.register(new ComponentByCompiledMessageTransformer());
+    transformerRegistry.register(new ComponentByTranslatableTransformer());
     transformerRegistry.register(new StringByComponentTransformer());
   }
 }

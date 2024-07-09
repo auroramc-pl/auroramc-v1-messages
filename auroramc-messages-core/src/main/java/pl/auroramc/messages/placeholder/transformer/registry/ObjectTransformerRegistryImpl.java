@@ -45,7 +45,7 @@ class ObjectTransformerRegistryImpl implements ObjectTransformerRegistry {
 
   @Override
   public void register(final ObjectTransformer<?, ?> transformer) {
-    transformersByTypes.put(transformer.getTransformatableType(), transformer);
+    transformersByTypes.put(transformer.getTransformationType(), transformer);
   }
 
   @Override
