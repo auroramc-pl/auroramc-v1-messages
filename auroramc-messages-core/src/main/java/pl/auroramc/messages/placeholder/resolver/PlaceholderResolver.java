@@ -1,7 +1,7 @@
 package pl.auroramc.messages.placeholder.resolver;
 
 import net.kyori.adventure.audience.Audience;
-import pl.auroramc.messages.message.property.MessageProperty;
+import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
@@ -19,7 +19,7 @@ public interface PlaceholderResolver<T extends Audience> {
 
   void register(final ObjectTransformerPack... transformerPacks);
 
-  String resolve(final T viewer, final String template, final MessageProperty property);
+  MutableMessage resolve(final T viewer, final MutableMessage message);
 
-  String apply(final T viewer, final String template, final MessageProperty property);
+  String transform(final Object value);
 }

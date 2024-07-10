@@ -1,11 +1,11 @@
 package pl.auroramc.messages.placeholder.resolver;
 
+import static pl.auroramc.commons.format.StringUtils.BLANK;
 import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getParentType;
-import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getPlaceholderKey;
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
-import java.util.Map.Entry;
 import net.kyori.adventure.audience.Audience;
+import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.property.MessageProperty;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
@@ -16,7 +16,6 @@ import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRe
 class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver<T> {
 
   private static final int TRANSFORMATION_MAXIMUM_TRIES = 5;
-  private static final String BLANK_VALUE = "";
   private final ObjectTransformerRegistry transformerRegistry;
   private final PlaceholderScanner placeholderScanner;
   private final PlaceholderEvaluator placeholderEvaluator;
@@ -36,8 +35,10 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   @Override
-  public String resolve(final T viewer, final String template, MessageProperty property) {
-    final String[] paths = placeholderScanner.getPlaceholderPaths(template);
+  public MutableMessage resolve(final T viewer, final MutableMessage message) {
+    MessageProperty property = message.getProperty();
+
+    final String[] paths = placeholderScanner.getPlaceholderPaths(message.getTemplate());
     for (final String path : paths) {
       if (property.getValueByPath(path) != null) {
         continue;
@@ -50,27 +51,17 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
       }
     }
 
-    return apply(viewer, template, property);
+    return MutableMessage.of(message.getTemplate(), property);
   }
 
   @Override
-  public String apply(final T viewer, String template, final MessageProperty property) {
-    for (final Entry<String, Object> valueByPath : property.getValuesByPaths().entrySet()) {
-      template =
-          template.replace(
-              getPlaceholderKey(valueByPath.getKey()), transform(valueByPath.getValue()));
-    }
-
-    return template;
-  }
-
-  private String transform(final Object value) {
+  public String transform(final Object value) {
     return transform(value, 0);
   }
 
   private String transform(final Object value, int tries) {
     if (value == null) {
-      return BLANK_VALUE;
+      return BLANK;
     }
     
     if (tries > TRANSFORMATION_MAXIMUM_TRIES) {

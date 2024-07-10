@@ -11,6 +11,7 @@ import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
 import pl.auroramc.messages.message.group.MutableMessageGroup;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
+import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
 
@@ -18,11 +19,13 @@ public interface MessageCompiler<T extends Audience> {
 
   static <T extends Audience> MessageCompiler<T> getMessageCompiler(
       final Executor executor, final ObjectTransformerPack... transformerPacks) {
+    final PlaceholderScanner placeholderScanner = getPlaceholderScanner();
     return getMessageCompiler(
         executor,
+        placeholderScanner,
         getPlaceholderResolver(
             getObjectTransformerRegistry(transformerPacks),
-            getPlaceholderScanner(),
+            placeholderScanner,
             getReflectivePlaceholderEvaluator()));
   }
 
@@ -31,8 +34,10 @@ public interface MessageCompiler<T extends Audience> {
   }
 
   static <T extends Audience> MessageCompiler<T> getMessageCompiler(
-      final Executor executor, final PlaceholderResolver<T> placeholderResolver) {
-    return new MessageCompilerImpl<>(executor, placeholderResolver);
+      final Executor executor,
+      final PlaceholderScanner placeholderScanner,
+      final PlaceholderResolver<T> placeholderResolver) {
+    return new MessageCompilerImpl<>(executor, placeholderScanner, placeholderResolver);
   }
 
   default CompiledMessage compile(

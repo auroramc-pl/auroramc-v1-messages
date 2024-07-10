@@ -1,6 +1,7 @@
 package pl.auroramc.messages.message;
 
 import static java.util.Arrays.stream;
+import static pl.auroramc.commons.format.StringUtils.BLANK;
 import static pl.auroramc.messages.message.property.MessageProperty.getMessageProperty;
 
 import java.util.Map;
@@ -9,8 +10,7 @@ import pl.auroramc.messages.message.property.MessageProperty;
 public class MutableMessage {
 
   public static final String LINE_DELIMITER = "<newline>";
-  private static final String EMPTY_DELIMITER = "";
-  private static final MutableMessage EMPTY_MESSAGE = of(EMPTY_DELIMITER);
+  private static final MutableMessage EMPTY_MESSAGE = of(BLANK);
   private final String template;
   private final MessageProperty property;
 
@@ -21,6 +21,10 @@ public class MutableMessage {
 
   public static MutableMessage of(final String template) {
     return new MutableMessage(template, getMessageProperty());
+  }
+
+  public static MutableMessage of(final String template, final MessageProperty property) {
+    return new MutableMessage(template, property);
   }
 
   public static MutableMessage empty() {

@@ -5,9 +5,9 @@ import static java.lang.Character.toUpperCase;
 
 import java.util.Map;
 
-class ReflectivePlaceholderEvaluatorUtils {
+public class ReflectivePlaceholderEvaluatorUtils {
 
-  private static final Map<Character, String> PATH_TOKENS = Map.of('@', "get");
+  public static final Map<Character, String> PATH_TOKENS = Map.of('@', "get");
 
   ReflectivePlaceholderEvaluatorUtils() {}
 

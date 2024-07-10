@@ -4,7 +4,7 @@ import static me.clip.placeholderapi.PlaceholderAPI.setPlaceholders;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pl.auroramc.messages.message.property.MessageProperty;
+import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
@@ -27,12 +27,13 @@ public class BukkitPlaceholderResolver extends PlaceholderResolverImpl<CommandSe
   }
 
   @Override
-  public String apply(
-      final CommandSender viewer, final String template, final MessageProperty property) {
+  public MutableMessage resolve(final CommandSender viewer, final MutableMessage message) {
+    final MutableMessage resolvedMessage = super.resolve(viewer, message);
     if (viewer instanceof Player player) {
-      return setPlaceholders(player, super.apply(viewer, template, property));
+      return MutableMessage.of(
+          setPlaceholders(player, resolvedMessage.getTemplate()), resolvedMessage.getProperty());
     }
 
-    return super.apply(null, template, property);
+    return resolvedMessage;
   }
 }
