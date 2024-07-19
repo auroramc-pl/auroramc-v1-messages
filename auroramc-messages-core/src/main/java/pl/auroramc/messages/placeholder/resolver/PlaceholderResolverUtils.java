@@ -7,8 +7,8 @@ import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRe
 final class PlaceholderResolverUtils {
 
   private static final String KYORI_PACKAGE_NAME = "net.kyori.adventure.text";
-  private static final String PLACEHOLDER_KEY_TOKEN_INITIAL = "{";
-  private static final String PLACEHOLDER_KEY_TOKEN_ENCLOSE = "}";
+  private static final String PLACEHOLDER_KEY_TOKEN_INITIAL = "<";
+  private static final String PLACEHOLDER_KEY_TOKEN_ENCLOSE = ">";
 
   private PlaceholderResolverUtils() {}
 
