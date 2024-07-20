@@ -9,6 +9,5 @@ public class StandardObjectTransformerPack implements ObjectTransformerPack {
   public void register(final ObjectTransformerRegistry transformerRegistry) {
     transformerRegistry.register(new ComponentByCompiledMessageTransformer());
     transformerRegistry.register(new ComponentByTranslatableTransformer());
-    transformerRegistry.register(new StringByComponentTransformer());
   }
 }

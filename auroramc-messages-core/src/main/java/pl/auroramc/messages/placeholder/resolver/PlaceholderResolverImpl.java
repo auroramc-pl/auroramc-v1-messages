@@ -5,6 +5,7 @@ import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.ComponentLike;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.property.MessageProperty;
 import pl.auroramc.messages.placeholder.evaluator.PlaceholderEvaluator;
@@ -55,15 +56,15 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   @Override
-  public String transform(final Object value) {
+  public Object transform(final Object value) {
     return transform(value, 0);
   }
 
-  private String transform(final Object value, int tries) {
+  private Object transform(final Object value, int tries) {
     if (value == null) {
       return BLANK;
     }
-    
+
     if (tries > TRANSFORMATION_MAXIMUM_TRIES) {
       return value.toString();
     }
@@ -71,12 +72,12 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
     final ObjectTransformer<Object, Object> transformer =
         transformerRegistry.getTransformer(getParentType(transformerRegistry, value));
     if (transformer == null) {
-      return value.toString();
+      return value;
     }
 
     final Object transformedValue = transformer.transform(value);
-    if (transformedValue instanceof String) {
-      return transformedValue.toString();
+    if (transformedValue instanceof String || transformedValue instanceof ComponentLike) {
+      return transformedValue;
     }
 
     return transform(transformedValue, tries + 1);

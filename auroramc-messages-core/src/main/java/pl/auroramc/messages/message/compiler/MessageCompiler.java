@@ -22,7 +22,6 @@ public interface MessageCompiler<T extends Audience> {
     final PlaceholderScanner placeholderScanner = getPlaceholderScanner();
     return getMessageCompiler(
         executor,
-        placeholderScanner,
         getPlaceholderResolver(
             getObjectTransformerRegistry(transformerPacks),
             placeholderScanner,
@@ -34,10 +33,8 @@ public interface MessageCompiler<T extends Audience> {
   }
 
   static <T extends Audience> MessageCompiler<T> getMessageCompiler(
-      final Executor executor,
-      final PlaceholderScanner placeholderScanner,
-      final PlaceholderResolver<T> placeholderResolver) {
-    return new MessageCompilerImpl<>(executor, placeholderScanner, placeholderResolver);
+      final Executor executor, final PlaceholderResolver<T> placeholderResolver) {
+    return new MessageCompilerImpl<>(executor, placeholderResolver);
   }
 
   default CompiledMessage compile(

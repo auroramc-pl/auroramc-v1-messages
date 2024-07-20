@@ -23,7 +23,6 @@ public interface VelocityMessageCompiler extends MessageCompiler<CommandSource> 
     final VelocityMessageCompiler messageCompiler =
         getVelocityMessageCompiler(
             new CaffeineExecutor(scheduler),
-            placeholderScanner,
             getPlaceholderResolver(
                 getObjectTransformerRegistry(transformerPacks),
                 placeholderScanner,
@@ -34,9 +33,7 @@ public interface VelocityMessageCompiler extends MessageCompiler<CommandSource> 
   }
 
   static VelocityMessageCompiler getVelocityMessageCompiler(
-      final Executor executor,
-      final PlaceholderScanner placeholderScanner,
-      final PlaceholderResolver<CommandSource> placeholderResolver) {
-    return new VelocityMessageCompilerImpl(executor, placeholderScanner, placeholderResolver);
+      final Executor executor, final PlaceholderResolver<CommandSource> placeholderResolver) {
+    return new VelocityMessageCompilerImpl(executor, placeholderResolver);
   }
 }

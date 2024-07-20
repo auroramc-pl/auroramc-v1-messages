@@ -21,5 +21,5 @@ public interface PlaceholderResolver<T extends Audience> {
 
   MutableMessage resolve(final T viewer, final MutableMessage message);
 
-  String transform(final Object value);
+  Object transform(final Object value);
 }

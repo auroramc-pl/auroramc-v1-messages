@@ -6,9 +6,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.Translatable;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
 
-class ComponentByTranslatableTransformer extends ObjectTransformer<Translatable, Component> {
+public class ComponentByTranslatableTransformer extends ObjectTransformer<Translatable, Component> {
 
-  ComponentByTranslatableTransformer() {
+  protected ComponentByTranslatableTransformer() {
     super(Translatable.class);
   }
 

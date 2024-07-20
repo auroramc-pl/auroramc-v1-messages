@@ -24,21 +24,18 @@ public interface BukkitMessageCompiler extends MessageCompiler<CommandSender> {
     final BukkitMessageCompiler messageCompiler =
         getBukkitMessageCompiler(
             new CaffeineExecutor(scheduler),
-            placeholderScanner,
             getBukkitPlaceholderResolver(
                 getObjectTransformerRegistry(transformerPacks),
                 placeholderScanner,
                 getReflectivePlaceholderEvaluator()));
     messageCompiler.register(new CommonsObjectTransformerPack());
     messageCompiler.register(new StandardObjectTransformerPack());
-    messageCompiler.register(new BukkitObjectTransformerPack(messageCompiler));
+    messageCompiler.register(new BukkitObjectTransformerPack());
     return messageCompiler;
   }
 
   static BukkitMessageCompiler getBukkitMessageCompiler(
-      final Executor executor,
-      final PlaceholderScanner placeholderScanner,
-      final PlaceholderResolver<CommandSender> placeholderResolver) {
-    return new BukkitMessageCompilerImpl(executor, placeholderScanner, placeholderResolver);
+      final Executor executor, final PlaceholderResolver<CommandSender> placeholderResolver) {
+    return new BukkitMessageCompilerImpl(executor, placeholderResolver);
   }
 }
