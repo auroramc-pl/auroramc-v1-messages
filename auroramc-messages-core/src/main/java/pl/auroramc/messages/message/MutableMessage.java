@@ -11,6 +11,7 @@ public class MutableMessage {
 
   public static final String LINE_DELIMITER = "<newline>";
   private static final MutableMessage EMPTY_MESSAGE = of(BLANK);
+  private static final MutableMessage NEWLINE_MESSAGE = of(LINE_DELIMITER);
   private final String template;
   private final MessageProperty property;
 
@@ -29,6 +30,10 @@ public class MutableMessage {
 
   public static MutableMessage empty() {
     return EMPTY_MESSAGE;
+  }
+
+  public static MutableMessage newline() {
+    return NEWLINE_MESSAGE;
   }
 
   public MutableMessage placeholder(final String path, final Object value) {
