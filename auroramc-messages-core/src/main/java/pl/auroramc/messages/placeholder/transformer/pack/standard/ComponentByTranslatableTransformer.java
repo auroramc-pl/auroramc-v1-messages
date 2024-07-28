@@ -5,6 +5,7 @@ import static net.kyori.adventure.text.Component.translatable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.Translatable;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.viewer.Viewer;
 
 public class ComponentByTranslatableTransformer extends ObjectTransformer<Translatable, Component> {
 
@@ -13,7 +14,7 @@ public class ComponentByTranslatableTransformer extends ObjectTransformer<Transl
   }
 
   @Override
-  public Component transform(final Translatable value) {
+  public Component transform(final Viewer viewer, final Translatable value) {
     return translatable(value.translationKey());
   }
 }

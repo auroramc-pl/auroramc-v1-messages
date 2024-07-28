@@ -10,22 +10,17 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
-import pl.auroramc.messages.i18n.locale.LocaleProvider;
+import pl.auroramc.messages.viewer.Viewer;
 
-abstract class MessageService<M, V> implements MessageFacade<M, V> {
+abstract class MessageService<M> implements MessageFacade<M> {
 
   private final Supplier<Configurer> configurer;
   private final Locale fallbackLocale;
-  private final LocaleProvider<V> localeProvider;
   private final Map<Locale, Map<String, M>> messagesByLocales;
 
-  MessageService(
-      final Supplier<Configurer> configurer,
-      final Locale fallbackLocale,
-      final LocaleProvider<V> localeProvider) {
+  MessageService(final Supplier<Configurer> configurer, final Locale fallbackLocale) {
     this.configurer = configurer;
     this.fallbackLocale = fallbackLocale;
-    this.localeProvider = localeProvider;
     this.messagesByLocales = new ConcurrentHashMap<>();
   }
 
@@ -59,8 +54,8 @@ abstract class MessageService<M, V> implements MessageFacade<M, V> {
   }
 
   @Override
-  public M getMessage(final V viewer, final String key) {
-    return getMessage(localeProvider.getLocale(viewer), key);
+  public M getMessage(final Viewer viewer, final String key) {
+    return getMessage(viewer.getLocale(), key);
   }
 
   @Override

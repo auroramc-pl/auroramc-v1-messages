@@ -1,23 +1,20 @@
 package pl.auroramc.messages.viewer;
 
+import com.velocitypowered.api.proxy.Player;
+import java.util.Locale;
 import net.kyori.adventure.audience.Audience;
-import pl.auroramc.messages.message.compiler.CompiledMessage;
-import pl.auroramc.messages.message.display.MessageDisplay;
 
-public class VelocityViewer implements Viewer {
-
-  private final Audience audience;
+public class VelocityViewer extends KyoriViewer {
 
   VelocityViewer(final Audience audience) {
-    this.audience = audience;
-  }
-
-  public static VelocityViewer wrap(final Audience audience) {
-    return new VelocityViewer(audience);
+    super(audience);
   }
 
   @Override
-  public void deliver(final CompiledMessage message, final MessageDisplay... displays) {
-    message.deliver(audience, displays);
+  public Locale getLocale() {
+    if (unwrap() instanceof Player player && player.getEffectiveLocale() != null) {
+      return player.getEffectiveLocale();
+    }
+    return super.getLocale();
   }
 }

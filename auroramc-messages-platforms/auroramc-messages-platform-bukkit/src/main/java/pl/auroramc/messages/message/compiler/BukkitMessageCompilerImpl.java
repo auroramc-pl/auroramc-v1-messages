@@ -1,14 +1,12 @@
 package pl.auroramc.messages.message.compiler;
 
 import java.util.concurrent.Executor;
-import org.bukkit.command.CommandSender;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 
-class BukkitMessageCompilerImpl extends MessageCompilerImpl<CommandSender>
-    implements BukkitMessageCompiler {
+class BukkitMessageCompilerImpl extends MessageCompilerImpl implements BukkitMessageCompiler {
 
   BukkitMessageCompilerImpl(
-      final Executor executor, final PlaceholderResolver<CommandSender> placeholderResolver) {
+      final Executor executor, final PlaceholderResolver placeholderResolver) {
     super(executor, placeholderResolver);
   }
 }

@@ -5,7 +5,6 @@ import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolver.getP
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScanner.getPlaceholderScanner;
 import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry.getObjectTransformerRegistry;
 
-import com.velocitypowered.api.command.CommandSource;
 import java.util.concurrent.Executor;
 import pl.auroramc.commons.scheduler.Scheduler;
 import pl.auroramc.commons.scheduler.caffeine.CaffeineExecutor;
@@ -15,7 +14,7 @@ import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
 import pl.auroramc.messages.serdes.commons.CommonsObjectTransformerPack;
 
-public interface VelocityMessageCompiler extends MessageCompiler<CommandSource> {
+public interface VelocityMessageCompiler extends MessageCompiler {
 
   static VelocityMessageCompiler getVelocityMessageCompiler(
       final Scheduler scheduler, final ObjectTransformerPack... transformerPacks) {
@@ -33,7 +32,7 @@ public interface VelocityMessageCompiler extends MessageCompiler<CommandSource> 
   }
 
   static VelocityMessageCompiler getVelocityMessageCompiler(
-      final Executor executor, final PlaceholderResolver<CommandSource> placeholderResolver) {
+      final Executor executor, final PlaceholderResolver placeholderResolver) {
     return new VelocityMessageCompilerImpl(executor, placeholderResolver);
   }
 }

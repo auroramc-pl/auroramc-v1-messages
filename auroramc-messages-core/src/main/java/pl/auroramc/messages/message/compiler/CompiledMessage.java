@@ -1,12 +1,11 @@
 package pl.auroramc.messages.message.compiler;
 
 import static pl.auroramc.messages.message.compiler.CompiledMessageCollectorUtils.appendComponent;
-import static pl.auroramc.messages.message.display.MessageDisplay.ACTION_BAR;
 import static pl.auroramc.messages.message.display.MessageDisplay.CHAT;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import pl.auroramc.messages.message.display.MessageDisplay;
+import pl.auroramc.messages.viewer.Viewer;
 
 public class CompiledMessage {
 
@@ -30,26 +29,12 @@ public class CompiledMessage {
     return new CompiledMessage(appendComponent(component, message.getComponent()));
   }
 
-  public void deliver(final Audience audience) {
-    deliver(audience, CHAT);
+  public void deliver(final Viewer viewer) {
+    viewer.deliver(this, CHAT);
   }
 
-  public void deliver(final Audience audience, final MessageDisplay... displays) {
-    if (displays.length == 0) {
-      throw new CompiledMessageDeliveringException("At least one display must be provided");
-    }
-
-    for (final MessageDisplay display : displays) {
-      deliver(audience, display);
-    }
-  }
-
-  private void deliver(final Audience audience, final MessageDisplay display) {
-    if (display == CHAT) {
-      audience.sendMessage(component);
-    } else if (display == ACTION_BAR) {
-      audience.sendActionBar(component);
-    }
+  public void deliver(final Viewer viewer, final MessageDisplay... displays) {
+    viewer.deliver(this, displays);
   }
 
   public Component getComponent() {

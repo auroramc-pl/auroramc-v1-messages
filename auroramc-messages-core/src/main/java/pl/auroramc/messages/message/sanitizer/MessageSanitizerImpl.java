@@ -12,26 +12,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import pl.auroramc.commons.tuplet.Pair;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
+import pl.auroramc.messages.viewer.Viewer;
 
-class MessageSanitizerImpl<T extends Audience> implements MessageSanitizer {
+class MessageSanitizerImpl implements MessageSanitizer {
 
   private static final int UNKNOWN_INDEX = -1;
-  private final PlaceholderResolver<T> placeholderResolver;
+  private final PlaceholderResolver placeholderResolver;
   private final Map<String, String> normalizedKeyByRawKey;
 
-  MessageSanitizerImpl(final PlaceholderResolver<T> placeholderResolver) {
+  MessageSanitizerImpl(final PlaceholderResolver placeholderResolver) {
     this.placeholderResolver = placeholderResolver;
     this.normalizedKeyByRawKey = new ConcurrentHashMap<>();
   }
 
   @Override
-  public Pair<MutableMessage, TagResolver[]> getSanitizedMessage(MutableMessage message) {
+  public Pair<MutableMessage, TagResolver[]> getSanitizedMessage(
+      final Viewer viewer, MutableMessage message) {
     String template = message.getTemplate();
 
     final Set<TagResolver> placeholders = new HashSet<>();
@@ -41,11 +42,12 @@ class MessageSanitizerImpl<T extends Audience> implements MessageSanitizer {
       final String targetKey = getPlaceholderKey(rawKey);
       if (!rawKey.equals(targetKey)) {
         template = template.replace(rawKey, targetKey);
-        template = template.replace(targetKey + PATH_CHILDREN_DELIMITER, rawKey + PATH_CHILDREN_DELIMITER);
+        template =
+            template.replace(targetKey + PATH_CHILDREN_DELIMITER, rawKey + PATH_CHILDREN_DELIMITER);
       }
 
       final Object transformedValue =
-          placeholderResolver.transform(placeholderKeyToValue.getValue());
+          placeholderResolver.transform(viewer, placeholderKeyToValue.getValue());
       placeholders.add(getSanitizedPlaceholder(targetKey, transformedValue));
     }
 

@@ -4,6 +4,7 @@ import static pl.auroramc.commons.format.temporal.TemporalFormatter.getFormatted
 
 import java.time.LocalDateTime;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.viewer.Viewer;
 
 class StringByLocalDateTimeTransformer extends ObjectTransformer<LocalDateTime, String> {
 
@@ -12,7 +13,7 @@ class StringByLocalDateTimeTransformer extends ObjectTransformer<LocalDateTime, 
   }
 
   @Override
-  public String transform(final LocalDateTime value) {
+  public String transform(final Viewer viewer, final LocalDateTime value) {
     return getFormattedTemporal(value);
   }
 }

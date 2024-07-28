@@ -1,20 +1,24 @@
 package pl.auroramc.messages.serdes.commons;
 
+import static pl.auroramc.commons.format.duration.DurationFormatter.getFormattedDuration;
+import static pl.auroramc.commons.i18n.plural.Pluralizers.getPluralizer;
+import static pl.auroramc.messages.serdes.commons.StringByDurationTransformerUtils.getDurationFormatterVocabularyByLocale;
+
 import java.time.Duration;
-import pl.auroramc.commons.format.duration.DurationFormatter;
+import java.util.Locale;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.viewer.Viewer;
 
 class StringByDurationTransformer extends ObjectTransformer<Duration, String> {
 
-  private final DurationFormatter durationFormatter;
-
-  StringByDurationTransformer(final DurationFormatter durationFormatter) {
+  StringByDurationTransformer() {
     super(Duration.class);
-    this.durationFormatter = durationFormatter;
   }
 
   @Override
-  public String transform(final Duration value) {
-    return durationFormatter.getFormattedDuration(value);
+  public String transform(final Viewer viewer, final Duration value) {
+    final Locale locale = viewer.getLocale();
+    return getFormattedDuration(
+        getDurationFormatterVocabularyByLocale(locale), getPluralizer(locale), value);
   }
 }
