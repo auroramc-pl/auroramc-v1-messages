@@ -6,7 +6,6 @@ import static pl.auroramc.messages.placeholder.scanner.PlaceholderScanner.getPla
 import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry.getObjectTransformerRegistry;
 
 import java.util.concurrent.Executor;
-import net.kyori.adventure.audience.Audience;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.decoration.MessageDecoration;
 import pl.auroramc.messages.message.group.MutableMessageGroup;
@@ -14,10 +13,11 @@ import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
+import pl.auroramc.messages.viewer.Viewer;
 
-public interface MessageCompiler<T extends Audience> {
+public interface MessageCompiler {
 
-  static <T extends Audience> MessageCompiler<T> getMessageCompiler(
+  static MessageCompiler getMessageCompiler(
       final Executor executor, final ObjectTransformerPack... transformerPacks) {
     final PlaceholderScanner placeholderScanner = getPlaceholderScanner();
     return getMessageCompiler(
@@ -28,13 +28,13 @@ public interface MessageCompiler<T extends Audience> {
             getReflectivePlaceholderEvaluator()));
   }
 
-  static <T extends Audience> MessageCompiler<T> getMessageCompiler(final Executor executor) {
+  static MessageCompiler getMessageCompiler(final Executor executor) {
     return getMessageCompiler(executor, new StandardObjectTransformerPack());
   }
 
-  static <T extends Audience> MessageCompiler<T> getMessageCompiler(
-      final Executor executor, final PlaceholderResolver<T> placeholderResolver) {
-    return new MessageCompilerImpl<>(executor, placeholderResolver);
+  static MessageCompiler getMessageCompiler(
+      final Executor executor, final PlaceholderResolver placeholderResolver) {
+    return new MessageCompilerImpl(executor, placeholderResolver);
   }
 
   default CompiledMessage compile(
@@ -43,7 +43,7 @@ public interface MessageCompiler<T extends Audience> {
   }
 
   CompiledMessage compile(
-      final T viewer, final MutableMessage message, final MessageDecoration... decorations);
+      final Viewer viewer, final MutableMessage message, final MessageDecoration... decorations);
 
   default CompiledMessage[] compileChildren(
       final MutableMessage message, final MessageDecoration... decorations) {
@@ -58,10 +58,10 @@ public interface MessageCompiler<T extends Audience> {
   }
 
   CompiledMessage[] compileChildren(
-      final T viewer, final MutableMessage message, final MessageDecoration... decorations);
+      final Viewer viewer, final MutableMessage message, final MessageDecoration... decorations);
 
   CompiledMessage[] compileChildren(
-      final T viewer,
+      final Viewer viewer,
       final MutableMessage message,
       final String delimiter,
       final MessageDecoration... decorations);

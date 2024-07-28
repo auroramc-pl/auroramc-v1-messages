@@ -4,15 +4,14 @@ import static java.time.Duration.ofSeconds;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableMap;
-import static net.kyori.adventure.audience.Audience.audience;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static pl.auroramc.messages.message.MutableMessage.LINE_DELIMITER;
 import static pl.auroramc.messages.message.sanitizer.MessageSanitizer.getMessageSanitizer;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.util.Map.Entry;
 import java.util.concurrent.Executor;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import pl.auroramc.commons.tuplet.Pair;
 import pl.auroramc.messages.message.MutableMessage;
@@ -21,14 +20,15 @@ import pl.auroramc.messages.message.group.MutableMessageGroup;
 import pl.auroramc.messages.message.sanitizer.MessageSanitizer;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
+import pl.auroramc.messages.viewer.Viewer;
 
-class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
+class MessageCompilerImpl implements MessageCompiler {
 
   private final MessageSanitizer messageSanitizer;
-  private final PlaceholderResolver<T> placeholderResolver;
+  private final PlaceholderResolver placeholderResolver;
   private final Cache<MutableMessage, CompiledMessage> compiledMessagesByTemplates;
 
-  MessageCompilerImpl(final Executor executor, final PlaceholderResolver<T> placeholderResolver) {
+  MessageCompilerImpl(final Executor executor, final PlaceholderResolver placeholderResolver) {
     this.messageSanitizer = getMessageSanitizer(placeholderResolver);
     this.placeholderResolver = placeholderResolver;
     this.compiledMessagesByTemplates =
@@ -37,16 +37,16 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
 
   @Override
   public CompiledMessage compile(
-      final T viewer, final MutableMessage message, final MessageDecoration... decorations) {
+      final Viewer viewer, final MutableMessage message, final MessageDecoration... decorations) {
     final MutableMessage resolvedMessage = placeholderResolver.resolve(viewer, message);
     return compiledMessagesByTemplates.get(
-        resolvedMessage, key -> compile0(resolvedMessage, decorations));
+        resolvedMessage, key -> compile0(viewer, resolvedMessage, decorations));
   }
 
   private CompiledMessage compile0(
-      final MutableMessage message, final MessageDecoration... decorations) {
+      final Viewer viewer, final MutableMessage message, final MessageDecoration... decorations) {
     final Pair<MutableMessage, TagResolver[]> sanitizedMessage =
-        messageSanitizer.getSanitizedMessage(message);
+        messageSanitizer.getSanitizedMessage(viewer, message);
     return new CompiledMessage(
         miniMessage()
             .deserialize(sanitizedMessage.a().getTemplate(), sanitizedMessage.b())
@@ -57,13 +57,13 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
 
   @Override
   public CompiledMessage[] compileChildren(
-      final T viewer, final MutableMessage message, final MessageDecoration... decorations) {
+      final Viewer viewer, final MutableMessage message, final MessageDecoration... decorations) {
     return compileChildren(viewer, message, LINE_DELIMITER, decorations);
   }
 
   @Override
   public CompiledMessage[] compileChildren(
-      final T viewer,
+      final Viewer viewer,
       final MutableMessage message,
       final String delimiter,
       final MessageDecoration... decorations) {
@@ -79,8 +79,7 @@ class MessageCompilerImpl<T extends Audience> implements MessageCompiler<T> {
         messageGroup.messagesByReceivers().entrySet().stream()
             .collect(
                 toUnmodifiableMap(
-                    entry -> compile(null, entry.getKey(), decorations),
-                    entry -> audience(entry.getValue()))));
+                    entry -> compile(null, entry.getKey(), decorations), Entry::getValue)));
   }
 
   @Override

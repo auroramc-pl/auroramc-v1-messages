@@ -4,6 +4,7 @@ import static pl.auroramc.commons.format.decimal.DecimalFormatter.getFormattedDe
 
 import java.math.BigDecimal;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.viewer.Viewer;
 
 class StringByBigDecimalTransformer extends ObjectTransformer<BigDecimal, String> {
 
@@ -12,7 +13,7 @@ class StringByBigDecimalTransformer extends ObjectTransformer<BigDecimal, String
   }
 
   @Override
-  public String transform(final BigDecimal value) {
+  public String transform(final Viewer viewer, final BigDecimal value) {
     return getFormattedDecimal(value);
   }
 }

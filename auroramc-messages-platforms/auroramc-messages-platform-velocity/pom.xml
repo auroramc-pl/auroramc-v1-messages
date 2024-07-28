@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>auroramc-messages-platform-velocity</artifactId>
+  <dependencies>
+    <dependency>
+      <artifactId>auroramc-messages-core</artifactId>
+      <groupId>pl.auroramc</groupId>
+      <scope>compile</scope>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>auroramc-commons-core</artifactId>
+      <groupId>pl.auroramc</groupId>
+      <scope>compile</scope>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>auroramc-messages-serdes-commons</artifactId>
+      <groupId>pl.auroramc</groupId>
+      <scope>compile</scope>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>okaeri-configs-core</artifactId>
+      <groupId>eu.okaeri</groupId>
+      <scope>provided</scope>
+      <version>5.0.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>velocity-api</artifactId>
+      <groupId>com.velocitypowered</groupId>
+      <scope>provided</scope>
+      <version>3.3.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
-    <groupId>pl.auroramc</groupId>
     <artifactId>auroramc-messages-platforms</artifactId>
+    <groupId>pl.auroramc</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
-  <artifactId>auroramc-messages-platform-velocity</artifactId>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,38 +62,5 @@
       <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
   </repositories>
-
-  <dependencies>
-    <dependency>
-      <groupId>pl.auroramc</groupId>
-      <artifactId>auroramc-messages-core</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>pl.auroramc</groupId>
-      <artifactId>auroramc-commons-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>pl.auroramc</groupId>
-      <artifactId>auroramc-messages-serdes-commons</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>eu.okaeri</groupId>
-      <artifactId>okaeri-configs-core</artifactId>
-      <version>5.0.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.velocitypowered</groupId>
-      <artifactId>velocity-api</artifactId>
-      <version>3.3.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
 
 </project>

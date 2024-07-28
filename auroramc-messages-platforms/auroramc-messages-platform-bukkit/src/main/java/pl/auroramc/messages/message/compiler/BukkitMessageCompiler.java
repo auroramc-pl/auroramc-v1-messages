@@ -6,7 +6,6 @@ import static pl.auroramc.messages.placeholder.scanner.PlaceholderScanner.getPla
 import static pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry.getObjectTransformerRegistry;
 
 import java.util.concurrent.Executor;
-import org.bukkit.command.CommandSender;
 import pl.auroramc.commons.scheduler.Scheduler;
 import pl.auroramc.commons.scheduler.caffeine.CaffeineExecutor;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
@@ -16,7 +15,7 @@ import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.pack.standard.StandardObjectTransformerPack;
 import pl.auroramc.messages.serdes.commons.CommonsObjectTransformerPack;
 
-public interface BukkitMessageCompiler extends MessageCompiler<CommandSender> {
+public interface BukkitMessageCompiler extends MessageCompiler {
 
   static BukkitMessageCompiler getBukkitMessageCompiler(
       final Scheduler scheduler, final ObjectTransformerPack... transformerPacks) {
@@ -35,7 +34,7 @@ public interface BukkitMessageCompiler extends MessageCompiler<CommandSender> {
   }
 
   static BukkitMessageCompiler getBukkitMessageCompiler(
-      final Executor executor, final PlaceholderResolver<CommandSender> placeholderResolver) {
+      final Executor executor, final PlaceholderResolver placeholderResolver) {
     return new BukkitMessageCompilerImpl(executor, placeholderResolver);
   }
 }

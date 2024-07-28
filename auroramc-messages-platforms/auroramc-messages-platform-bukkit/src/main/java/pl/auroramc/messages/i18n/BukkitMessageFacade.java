@@ -4,24 +4,13 @@ import eu.okaeri.configs.configurer.Configurer;
 import java.io.File;
 import java.util.Locale;
 import java.util.function.Supplier;
-import org.bukkit.command.CommandSender;
-import pl.auroramc.messages.i18n.locale.LocaleProvider;
 import pl.auroramc.messages.message.MutableMessage;
-import pl.auroramc.messages.i18n.locale.BukkitLocaleProvider;
 
-public interface BukkitMessageFacade extends MessageFacade<MutableMessage, CommandSender> {
+public interface BukkitMessageFacade extends MessageFacade<MutableMessage> {
 
   static BukkitMessageFacade getBukkitMessageFacade(
       final Supplier<Configurer> configurer, final Locale fallbackLocale) {
-    return getBukkitMessageFacade(
-        configurer, fallbackLocale, new BukkitLocaleProvider(fallbackLocale));
-  }
-
-  static BukkitMessageFacade getBukkitMessageFacade(
-      final Supplier<Configurer> configurer,
-      final Locale fallbackLocale,
-      final LocaleProvider<CommandSender> localeProvider) {
-    return new BukkitMessageFacadeImpl(configurer, fallbackLocale, localeProvider);
+    return new BukkitMessageFacadeImpl(configurer, fallbackLocale);
   }
 
   BukkitMessageFacade registerResources(

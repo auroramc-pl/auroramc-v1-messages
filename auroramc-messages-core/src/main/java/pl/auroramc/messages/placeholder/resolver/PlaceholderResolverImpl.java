@@ -4,7 +4,6 @@ import static pl.auroramc.commons.format.StringUtils.BLANK;
 import static pl.auroramc.messages.placeholder.resolver.PlaceholderResolverUtils.getParentType;
 import static pl.auroramc.messages.placeholder.scanner.PlaceholderScannerUtils.PATH_CHILDREN_DELIMITER;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.ComponentLike;
 import pl.auroramc.messages.message.MutableMessage;
 import pl.auroramc.messages.message.property.MessageProperty;
@@ -13,8 +12,9 @@ import pl.auroramc.messages.placeholder.scanner.PlaceholderScanner;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformerPack;
 import pl.auroramc.messages.placeholder.transformer.registry.ObjectTransformerRegistry;
+import pl.auroramc.messages.viewer.Viewer;
 
-class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver<T> {
+class PlaceholderResolverImpl implements PlaceholderResolver {
 
   private static final int TRANSFORMATION_MAXIMUM_TRIES = 5;
   private final ObjectTransformerRegistry transformerRegistry;
@@ -36,7 +36,7 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   @Override
-  public MutableMessage resolve(final T viewer, final MutableMessage message) {
+  public MutableMessage resolve(final Viewer viewer, final MutableMessage message) {
     MessageProperty property = message.getProperty();
 
     final String[] paths = placeholderScanner.getPlaceholderPaths(message.getTemplate());
@@ -48,7 +48,7 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
       if (placeholderScanner.hasPathChildren(path)) {
         final String parentPath = path.substring(0, path.indexOf(PATH_CHILDREN_DELIMITER));
         final String childPath = path.substring(path.indexOf(PATH_CHILDREN_DELIMITER) + 1);
-        property = traverse(property, path, parentPath, null, childPath);
+        property = traverse(viewer, property, path, parentPath, null, childPath);
       }
     }
 
@@ -56,11 +56,11 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
   }
 
   @Override
-  public Object transform(final Object value) {
-    return transform(value, 0);
+  public Object transform(final Viewer viewer, final Object value) {
+    return transform(viewer, value, 0);
   }
 
-  private Object transform(final Object value, int tries) {
+  private Object transform(final Viewer viewer, final Object value, int tries) {
     if (value == null) {
       return BLANK;
     }
@@ -75,15 +75,16 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
       return value;
     }
 
-    final Object transformedValue = transformer.transform(value);
+    final Object transformedValue = transformer.transform(viewer, value);
     if (transformedValue instanceof String || transformedValue instanceof ComponentLike) {
       return transformedValue;
     }
 
-    return transform(transformedValue, tries + 1);
+    return transform(viewer, transformedValue, tries + 1);
   }
 
   private MessageProperty traverse(
+      final Viewer viewer,
       MessageProperty property,
       final String initialPath,
       final String parentPath,
@@ -102,6 +103,7 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
           childPath.indexOf(PATH_CHILDREN_DELIMITER, nextParentPathStartIndex);
 
       return traverse(
+          viewer,
           property,
           initialPath,
           childPath.substring(0, nextParentPathEndIndex),
@@ -121,7 +123,7 @@ class PlaceholderResolverImpl<T extends Audience> implements PlaceholderResolver
                 placeholderScanner.hasPathChildren(childPath) && childPathEndIndex != -1
                     ? childPath.substring(0, childPathStartIndex)
                     : childPath));
-    childValue = transform(childValue);
+    childValue = transform(viewer, childValue);
 
     return property.placeholder(initialPath, childValue);
   }

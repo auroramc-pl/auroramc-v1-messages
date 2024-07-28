@@ -1,14 +1,12 @@
 package pl.auroramc.messages.message.compiler;
 
-import com.velocitypowered.api.command.CommandSource;
 import java.util.concurrent.Executor;
 import pl.auroramc.messages.placeholder.resolver.PlaceholderResolver;
 
-class VelocityMessageCompilerImpl extends MessageCompilerImpl<CommandSource>
-    implements VelocityMessageCompiler {
+class VelocityMessageCompilerImpl extends MessageCompilerImpl implements VelocityMessageCompiler {
 
   VelocityMessageCompilerImpl(
-      final Executor executor, final PlaceholderResolver<CommandSource> placeholderResolver) {
+      final Executor executor, final PlaceholderResolver placeholderResolver) {
     super(executor, placeholderResolver);
   }
 }

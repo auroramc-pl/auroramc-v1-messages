@@ -4,6 +4,7 @@ import static pl.auroramc.commons.format.temporal.TemporalFormatter.getFormatted
 
 import java.time.Instant;
 import pl.auroramc.messages.placeholder.transformer.pack.ObjectTransformer;
+import pl.auroramc.messages.viewer.Viewer;
 
 class StringByInstantTransformer extends ObjectTransformer<Instant, String> {
 
@@ -12,7 +13,7 @@ class StringByInstantTransformer extends ObjectTransformer<Instant, String> {
   }
 
   @Override
-  public String transform(final Instant value) {
+  public String transform(final Viewer viewer, final Instant value) {
     return getFormattedTemporal(value);
   }
 }

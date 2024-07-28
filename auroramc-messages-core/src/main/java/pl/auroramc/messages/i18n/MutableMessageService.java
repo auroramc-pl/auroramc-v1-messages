@@ -3,16 +3,12 @@ package pl.auroramc.messages.i18n;
 import eu.okaeri.configs.configurer.Configurer;
 import java.util.Locale;
 import java.util.function.Supplier;
-import pl.auroramc.messages.i18n.locale.LocaleProvider;
 import pl.auroramc.messages.message.MutableMessage;
 
-class MutableMessageService<V> extends MessageService<MutableMessage, V> {
+class MutableMessageService extends MessageService<MutableMessage> {
 
-  MutableMessageService(
-      final Supplier<Configurer> configurer,
-      final Locale fallbackLocale,
-      final LocaleProvider<V> localeProvider) {
-    super(configurer, fallbackLocale, localeProvider);
+  MutableMessageService(final Supplier<Configurer> configurer, final Locale fallbackLocale) {
+    super(configurer, fallbackLocale);
   }
 
   @Override

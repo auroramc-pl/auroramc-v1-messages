@@ -1,5 +1,7 @@
 package pl.auroramc.messages.placeholder.transformer.pack;
 
+import pl.auroramc.messages.viewer.Viewer;
+
 public abstract class ObjectTransformer<T, R> {
 
   private final Class<?> transformationType;
@@ -8,7 +10,7 @@ public abstract class ObjectTransformer<T, R> {
     this.transformationType = transformationType;
   }
 
-  public abstract R transform(final T value);
+  public abstract R transform(final Viewer viewer, final T value);
 
   public Class<?> getTransformationType() {
     return transformationType;

@@ -1,23 +1,20 @@
 package pl.auroramc.messages.viewer;
 
+import java.util.Locale;
 import net.kyori.adventure.audience.Audience;
-import pl.auroramc.messages.message.compiler.CompiledMessage;
-import pl.auroramc.messages.message.display.MessageDisplay;
+import org.bukkit.entity.Player;
 
-public class BukkitViewer implements Viewer {
-
-  private final Audience audience;
+public class BukkitViewer extends KyoriViewer {
 
   BukkitViewer(final Audience audience) {
-    this.audience = audience;
-  }
-
-  public static BukkitViewer wrap(final Audience audience) {
-    return new BukkitViewer(audience);
+    super(audience);
   }
 
   @Override
-  public void deliver(final CompiledMessage message, final MessageDisplay... displays) {
-    message.deliver(audience, displays);
+  public Locale getLocale() {
+    if (unwrap() instanceof Player player) {
+      return player.locale();
+    }
+    return super.getLocale();
   }
 }
