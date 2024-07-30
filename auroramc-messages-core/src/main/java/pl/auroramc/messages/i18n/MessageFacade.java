@@ -6,6 +6,8 @@ import pl.auroramc.messages.viewer.Viewer;
 
 public interface MessageFacade<M> {
 
+  void refreshMessageSources();
+
   <S extends MessageSource> void registerMessageSource(final Locale locale, final S messageSource);
 
   M getMessage(final Locale locale, final String key);
