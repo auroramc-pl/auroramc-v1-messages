@@ -29,7 +29,7 @@ public class BukkitPlaceholderResolver extends PlaceholderResolverImpl {
   @Override
   public MutableMessage resolve(final Viewer viewer, final MutableMessage message) {
     final MutableMessage resolvedMessage = super.resolve(viewer, message);
-    if (viewer.unwrap() instanceof Player player) {
+    if (viewer != null && viewer.unwrap() instanceof Player player) {
       return MutableMessage.of(
           setPlaceholders(player, resolvedMessage.getTemplate()), resolvedMessage.getProperty());
     }
