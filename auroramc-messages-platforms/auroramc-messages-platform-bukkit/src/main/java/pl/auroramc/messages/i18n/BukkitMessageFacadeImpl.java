@@ -20,7 +20,7 @@ class BukkitMessageFacadeImpl extends MutableMessageService implements BukkitMes
   }
 
   @Override
-  public BukkitMessageFacade registerResources(
+  public BukkitMessageFacade registerMessageSource(
       final Class<? extends MessageSource> messageSourceType,
       final File jarFile,
       final File dataPath,
@@ -28,11 +28,12 @@ class BukkitMessageFacadeImpl extends MutableMessageService implements BukkitMes
       final String prefix,
       final String suffix) {
     unpackResources(jarFile, dataPath, path, prefix, suffix, emptySet())
-        .forEach(resourceFile -> registerResource(messageSourceType, prefix, suffix, resourceFile));
+        .forEach(
+            resourceFile -> registerMessageSource(messageSourceType, prefix, suffix, resourceFile));
     return this;
   }
 
-  private void registerResource(
+  private void registerMessageSource(
       final Class<? extends MessageSource> messageSourceType,
       final String prefix,
       final String suffix,

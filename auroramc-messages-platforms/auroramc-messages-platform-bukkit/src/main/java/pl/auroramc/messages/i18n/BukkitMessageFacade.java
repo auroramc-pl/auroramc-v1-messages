@@ -13,7 +13,7 @@ public interface BukkitMessageFacade extends MessageFacade<MutableMessage> {
     return new BukkitMessageFacadeImpl(configurer, fallbackLocale);
   }
 
-  BukkitMessageFacade registerResources(
+  BukkitMessageFacade registerMessageSource(
       final Class<? extends MessageSource> messageSourceType,
       final File jarFile,
       final File dataPath,
