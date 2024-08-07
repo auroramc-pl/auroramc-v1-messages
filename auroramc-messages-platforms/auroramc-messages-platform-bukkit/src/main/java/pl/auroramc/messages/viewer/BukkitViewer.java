@@ -6,15 +6,21 @@ import org.bukkit.entity.Player;
 
 public class BukkitViewer extends KyoriViewer {
 
-  BukkitViewer(final Audience audience) {
+  protected BukkitViewer(final Audience audience) {
     super(audience);
   }
 
   @Override
   public Locale getLocale() {
+    final Locale locale = getCurrentLocale();
+    if (locale != null) {
+      return locale;
+    }
+
     if (unwrap() instanceof Player player) {
       return player.locale();
     }
+
     return super.getLocale();
   }
 }

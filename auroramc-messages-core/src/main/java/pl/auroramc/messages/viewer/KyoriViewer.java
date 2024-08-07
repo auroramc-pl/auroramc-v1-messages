@@ -14,6 +14,7 @@ public class KyoriViewer implements Viewer {
 
   private static final Locale FALLBACK_LOCALE = ENGLISH;
   private final Audience audience;
+  private Locale currentLocale;
 
   KyoriViewer(final Audience audience) {
     this.audience = audience;
@@ -42,6 +43,14 @@ public class KyoriViewer implements Viewer {
   @Override
   public Object unwrap() {
     return audience;
+  }
+
+  public Locale getCurrentLocale() {
+    return currentLocale;
+  }
+
+  public void setCurrentLocale(final Locale currentLocale) {
+    this.currentLocale = currentLocale;
   }
 
   private void deliver(final CompiledMessage message, final MessageDisplay display) {

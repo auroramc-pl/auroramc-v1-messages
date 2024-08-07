@@ -12,9 +12,15 @@ public class VelocityViewer extends KyoriViewer {
 
   @Override
   public Locale getLocale() {
+    final Locale locale = getCurrentLocale();
+    if (locale != null) {
+      return locale;
+    }
+
     if (unwrap() instanceof Player player && player.getEffectiveLocale() != null) {
       return player.getEffectiveLocale();
     }
+
     return super.getLocale();
   }
 }

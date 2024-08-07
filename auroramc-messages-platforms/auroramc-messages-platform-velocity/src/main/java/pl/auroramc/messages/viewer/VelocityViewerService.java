@@ -1,21 +1,28 @@
 package pl.auroramc.messages.viewer;
 
-import static java.time.Duration.ofSeconds;
-
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 class VelocityViewerService implements VelocityViewerFacade {
 
-  private final LoadingCache<UUID, VelocityViewer> viewerByUniqueId;
   private final ProxyServer server;
+  private final Map<UUID, VelocityViewer> viewerByUniqueId;
 
   VelocityViewerService(final ProxyServer server) {
-    this.viewerByUniqueId =
-        Caffeine.newBuilder().expireAfterAccess(ofSeconds(30)).build(this::createViewerByUniqueId);
     this.server = server;
+    this.viewerByUniqueId = new ConcurrentHashMap<>();
+  }
+
+  @Override
+  public VelocityViewer getOrCreateViewerByUniqueId(final UUID uniqueId) {
+    final VelocityViewer cachedViewer = viewerByUniqueId.get(uniqueId);
+    if (cachedViewer != null) {
+      return cachedViewer;
+    }
+    return createViewerByUniqueId(uniqueId);
   }
 
   @Override
@@ -25,13 +32,23 @@ class VelocityViewerService implements VelocityViewerFacade {
 
   @Override
   public VelocityViewer createViewerByUniqueId(final UUID uniqueId) {
-    return server
+    final Player player = server
         .getPlayer(uniqueId)
-        .map(VelocityViewer::new)
         .orElseThrow(
             () ->
                 new ViewerInstantiationException(
                     "Could not create viewer for player identified by %s."
                         .formatted(uniqueId.toString())));
+    return cacheAndGetViewer(uniqueId, new VelocityViewer(player));
+  }
+
+  @Override
+  public void deleteViewerByUniqueId(final UUID uniqueId) {
+    viewerByUniqueId.remove(uniqueId);
+  }
+
+  private VelocityViewer cacheAndGetViewer(final UUID uniqueId, final VelocityViewer viewer) {
+    viewerByUniqueId.put(uniqueId, viewer);
+    return viewer;
   }
 }
