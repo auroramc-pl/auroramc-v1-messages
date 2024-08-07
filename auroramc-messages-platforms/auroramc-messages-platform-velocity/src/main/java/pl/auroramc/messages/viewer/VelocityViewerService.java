@@ -32,13 +32,14 @@ class VelocityViewerService implements VelocityViewerFacade {
 
   @Override
   public VelocityViewer createViewerByUniqueId(final UUID uniqueId) {
-    final Player player = server
-        .getPlayer(uniqueId)
-        .orElseThrow(
-            () ->
-                new ViewerInstantiationException(
-                    "Could not create viewer for player identified by %s."
-                        .formatted(uniqueId.toString())));
+    final Player player =
+        server
+            .getPlayer(uniqueId)
+            .orElseThrow(
+                () ->
+                    new ViewerInstantiationException(
+                        "Could not create viewer for player identified by %s."
+                            .formatted(uniqueId.toString())));
     return cacheAndGetViewer(uniqueId, new VelocityViewer(player));
   }
 

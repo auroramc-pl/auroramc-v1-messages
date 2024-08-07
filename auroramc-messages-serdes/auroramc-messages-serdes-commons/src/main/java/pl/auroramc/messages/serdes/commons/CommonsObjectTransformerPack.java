@@ -12,5 +12,6 @@ public class CommonsObjectTransformerPack implements ObjectTransformerPack {
     transformerRegistry.register(new StringByInstantTransformer());
     transformerRegistry.register(new StringByLocalDateTimeTransformer());
     transformerRegistry.register(new StringByLocalDateTransformer());
+    transformerRegistry.register(new StringByLocaleTransformer());
   }
 }
