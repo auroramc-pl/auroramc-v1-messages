@@ -30,7 +30,7 @@ abstract class MessageService<M> implements MessageFacade<M> {
   }
 
   @Override
-  public void refreshMessageSources() {
+  public void refresh() {
     messagesByLocales.clear();
     for (final Pair<Locale, MessageSource> messageSourceByLocale : messageSourceByLocales) {
       final MessageSource messageSource = messageSourceByLocale.b();
